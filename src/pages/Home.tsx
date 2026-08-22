@@ -75,7 +75,11 @@ export default function Home() {
             <ClickCursor className="absolute left-[354px] top-[329px] z-10 h-[100px] w-[70px]" />
           </div>
 
-          <img src={scrollChevron} alt="" className="absolute bottom-[66px] left-1/2 h-10 w-[70px] -translate-x-1/2" />
+          <img
+            src={scrollChevron}
+            alt=""
+            className="chevron-pulse absolute bottom-[76px] left-1/2 h-5 w-[35px] -translate-x-1/2"
+          />
         </div>
 
         {/* Projects */}
