@@ -7,6 +7,7 @@ import competitorLogos from '../assets/images/case-study/competitor-logos.png'
 import competitorScreenshot1 from '../assets/images/case-study/competitor-screenshot-1.png'
 import competitorScreenshot2 from '../assets/images/case-study/competitor-screenshot-2.png'
 import affinityMapping from '../assets/images/case-study/affinity-mapping.png'
+import personaInformedIssac from '../assets/images/case-study/persona-informed-issac.png'
 import sketch1 from '../assets/images/case-study/sketch-1.png'
 import sketch2 from '../assets/images/case-study/sketch-2.png'
 import lowfiSidenav from '../assets/images/case-study/lowfi-sidenav.png'
@@ -60,6 +61,32 @@ const finalProduct = [
   },
 ]
 
+const persona = {
+  meta: '42 · software engineer · new york',
+  needs: ['verified-only filtering', 'clear parody + satire labels', 'a cleaner homepage'],
+}
+
+const journey = [
+  { step: 'Opens app for tech news', pain: 'Three separate nav bars to parse', mood: 2 },
+  { step: 'Finds the news tab', pain: 'Buried inside search', mood: 4 },
+  { step: 'Only 5 topics, none tech', pain: 'Too few niches covered', mood: 1 },
+  { step: 'Searches, filters to verified', pain: 'Too many taps to get there', mood: 2 },
+  { step: 'Half the results are paid checkmarks', pain: 'Credible and paid look identical', mood: 2 },
+]
+
+/** Five-step mood scale, drawn to match the site's flat black-on-white line work. */
+function MoodFace({ mood, className }: { mood: number; className?: string }) {
+  const mouth = ['M 6 14 Q 10 9 14 14', 'M 6 13.5 Q 10 11 14 13.5', 'M 6 12.5 L 14 12.5', 'M 6 12 Q 10 15 14 12', 'M 6 11.5 Q 10 17 14 11.5'][mood]
+  return (
+    <svg viewBox="0 0 20 20" className={className} fill="none" stroke="black" strokeWidth="1.1" aria-hidden="true">
+      <circle cx="10" cy="10" r="8.5" />
+      <circle cx="7" cy="8" r="0.9" fill="black" stroke="none" />
+      <circle cx="13" cy="8" r="0.9" fill="black" stroke="none" />
+      <path d={mouth} strokeLinecap="round" />
+    </svg>
+  )
+}
+
 function SparkleIcon({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 77 77" className={className} fill="black" aria-hidden="true">
@@ -88,9 +115,9 @@ function PixelStat({ value, label }: { value: string; label: string }) {
   )
 }
 
-function InsightCell({ insight }: { insight: { n: string; text: string } }) {
+function InsightCell({ insight, className }: { insight: { n: string; text: string }; className?: string }) {
   return (
-    <div className="flex flex-1 flex-col items-center px-6 py-10 text-center">
+    <div className={`flex flex-1 flex-col items-center px-6 py-10 text-center ${className ?? ''}`}>
       {/* pixel glyphs sit low in their line box; nudge up to optically centre */}
       <p className="font-pixel text-[165px] leading-none -mb-4 -translate-y-[18px]">{insight.n}</p>
       <p className="text-[24px] tracking-[-0.96px]">{insight.text}</p>
@@ -144,7 +171,7 @@ export default function XRedesign() {
           search.
         </p>
 
-        <div className="mt-12 h-px w-full bg-gray-2/20" />
+        <div className="mt-12 w-full border-t border-gray-2/20" />
         <div className="mt-5 flex w-full items-center justify-between">
           {metaItems.map((m) => (
             <div key={m.label} className="flex flex-col items-start gap-4">
@@ -153,7 +180,7 @@ export default function XRedesign() {
             </div>
           ))}
         </div>
-        <div className="mt-5 h-px w-full bg-gray-2/20" />
+        <div className="mt-5 w-full border-t border-gray-2/20" />
 
         {/* Pain points */}
         <section className="mt-24">
@@ -193,8 +220,7 @@ export default function XRedesign() {
                     <PixelStat value="5" label="Competitors" />
                   </div>
                 </div>
-                <div className="w-px shrink-0 bg-gray-2/20" />
-                <div className="flex flex-1 items-center justify-center py-10">
+                <div className="flex flex-1 items-center justify-center border-l border-gray-2/20 py-10">
                   <img
                     src={competitorLogos}
                     alt="Competitor app logos"
@@ -203,9 +229,7 @@ export default function XRedesign() {
                 </div>
               </div>
 
-              <div className="h-px w-full bg-gray-2/20" />
-
-              <div className="flex flex-1 flex-col justify-center gap-12 px-10 py-12">
+              <div className="flex flex-1 flex-col justify-center gap-12 border-t border-gray-2/20 px-10 py-12">
                 <div className="flex gap-10">
                   <p className="w-[170px] shrink-0 text-[24px] text-gray-2 tracking-[-0.96px]">Strengths</p>
                   <div className="text-[24px] tracking-[-0.96px]">
@@ -226,10 +250,8 @@ export default function XRedesign() {
               </div>
             </div>
 
-            <div className="w-px shrink-0 bg-gray-2/20" />
-
             {/* Right half: the two competitor screenshots */}
-            <div className="flex w-1/2 items-center gap-8 px-10 py-10">
+            <div className="flex w-1/2 items-center gap-8 border-l border-gray-2/20 px-10 py-10">
               <figure className="flex-1">
                 <img
                   src={competitorScreenshot1}
@@ -250,6 +272,47 @@ export default function XRedesign() {
                   However, screens can get overcrowded with icons and text
                 </figcaption>
               </figure>
+            </div>
+          </div>
+        </section>
+
+        {/* User interviews & synthesis */}
+        <section className="mt-24">
+          <div className="flex w-full flex-wrap items-stretch gap-11">
+            <div className="flex w-[484px] flex-col">
+              <p className="mb-[37px] text-[20px] text-gray-2 tracking-[-0.8px]">user interviews &amp; affinity mapping</p>
+              <div className="flex w-full flex-1 flex-col justify-center gap-20 rounded-3xl bg-white px-10 py-10">
+                <div className="flex items-center gap-8">
+                  {/* pixel glyphs sit low in their line box; nudge up to optically centre */}
+                  <div className="-translate-y-[18px]">
+                    <PixelStat value="10" label="Interviewees" />
+                  </div>
+                  <p className="flex-1 text-[24px] tracking-[-0.96px]">
+                    We asked peers with &amp; without X experience to test three user flows, documenting their
+                    frustrations and critiques.
+                  </p>
+                </div>
+                <img
+                  src={affinityMapping}
+                  alt="Affinity mapping of interview notes"
+                  className="w-full rounded-xl object-cover"
+                />
+              </div>
+            </div>
+            <div className="flex w-[525px] flex-col">
+              <p className="mb-[37px] text-[20px] text-gray-2 tracking-[-0.8px]">synthesis — what should be done?</p>
+              {/* Two independent columns so each cell's rule sits directly below its own
+                  content — giving every number + description the same padding. */}
+              <div className="flex w-full items-stretch overflow-hidden rounded-3xl bg-white">
+                <div className="flex flex-1 flex-col">
+                  <InsightCell insight={insights[0]} />
+                  <InsightCell insight={insights[2]} className="border-t border-gray-2/20" />
+                </div>
+                <div className="flex flex-1 flex-col border-l border-gray-2/20">
+                  <InsightCell insight={insights[1]} />
+                  <InsightCell insight={insights[3]} className="border-t border-gray-2/20" />
+                </div>
+              </div>
             </div>
           </div>
         </section>
@@ -285,46 +348,40 @@ export default function XRedesign() {
           </ScrollMorph>
         </section>
 
-        {/* User interviews & synthesis */}
+        {/* User personas & journey mapping — one card: who he is, then where the
+            current flow loses him, step by step. */}
         <section className="mt-24">
-          <div className="flex w-full flex-wrap items-stretch gap-11">
-            <div className="flex w-[484px] flex-col">
-              <p className="mb-[37px] text-[20px] text-gray-2 tracking-[-0.8px]">user interviews &amp; affinity mapping</p>
-              <div className="flex w-full flex-1 flex-col justify-center gap-20 rounded-3xl bg-white px-10 py-10">
-                <div className="flex items-center gap-8">
-                  {/* pixel glyphs sit low in their line box; nudge up to optically centre */}
-                  <div className="-translate-y-[18px]">
-                    <PixelStat value="10" label="Interviewees" />
-                  </div>
-                  <p className="flex-1 text-[24px] tracking-[-0.96px]">
-                    We asked peers with &amp; without X experience to test three user flows, documenting their
-                    frustrations and critiques.
+          <p className="mb-[37px] text-[20px] text-gray-2 tracking-[-0.8px]">user personas &amp; journey mapping</p>
+
+          <div className="w-full overflow-hidden rounded-3xl bg-white">
+            <div className="flex items-center gap-8 px-10 py-9">
+              <img
+                src={personaInformedIssac}
+                alt="Illustrated portrait of Informed Issac"
+                className="size-[104px] shrink-0 rounded-2xl object-cover"
+              />
+              <div>
+                <p className="text-[32px] leading-none tracking-[-1.28px]">Informed Issac</p>
+                <p className="mt-3 text-[20px] text-gray-2 tracking-[-0.8px]">occasional user · {persona.meta}</p>
+              </div>
+              <div className="ml-auto flex flex-col items-end gap-1">
+                <p className="text-[20px] text-gray-2 tracking-[-0.8px]">needs</p>
+                {persona.needs.map((n) => (
+                  <p key={n} className="text-[20px] tracking-[-0.8px]">
+                    {n}
                   </p>
-                </div>
-                <img
-                  src={affinityMapping}
-                  alt="Affinity mapping of interview notes"
-                  className="w-full rounded-xl object-cover"
-                />
+                ))}
               </div>
             </div>
-            <div className="flex w-[525px] flex-col">
-              <p className="mb-[37px] text-[20px] text-gray-2 tracking-[-0.8px]">synthesis — what should be done?</p>
-              {/* Two independent columns so each cell's rule sits directly below its own
-                  content — giving every number + description the same padding. */}
-              <div className="flex w-full items-stretch overflow-hidden rounded-3xl bg-white">
-                <div className="flex flex-1 flex-col">
-                  <InsightCell insight={insights[0]} />
-                  <div className="h-px w-full bg-gray-2/20" />
-                  <InsightCell insight={insights[2]} />
+
+            <div className="grid grid-cols-5 border-t border-gray-2/20">
+              {journey.map((cell, i) => (
+                <div key={i} className={`flex flex-col gap-4 px-6 py-9 ${i > 0 ? 'border-l border-gray-2/20' : ''}`}>
+                  <MoodFace mood={cell.mood} className="size-6" />
+                  <p className="text-[20px] leading-snug tracking-[-0.8px]">{cell.step}</p>
+                  <p className="text-[16px] leading-snug tracking-[-0.64px] text-gray-2">{cell.pain}</p>
                 </div>
-                <div className="w-px shrink-0 bg-gray-2/20" />
-                <div className="flex flex-1 flex-col">
-                  <InsightCell insight={insights[1]} />
-                  <div className="h-px w-full bg-gray-2/20" />
-                  <InsightCell insight={insights[3]} />
-                </div>
-              </div>
+              ))}
             </div>
           </div>
         </section>
@@ -384,8 +441,8 @@ export default function XRedesign() {
         <section className="mt-24">
           <p className="mb-[37px] text-[20px] text-gray-2 tracking-[-0.8px]">a/b testing</p>
           <div className="relative h-[690px] w-full rounded-3xl bg-white">
-            <div className="absolute left-1/2 top-0 h-[600px] w-px -translate-x-1/2 bg-gray-2/20" />
-            <div className="absolute inset-x-0 top-[600px] h-px bg-gray-2/20" />
+            <div className="absolute left-1/2 top-0 h-[600px] -translate-x-1/2 border-l border-gray-2/20" />
+            <div className="absolute inset-x-0 top-[600px] border-t border-gray-2/20" />
 
             <img
               src={version1}
