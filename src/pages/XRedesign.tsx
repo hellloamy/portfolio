@@ -379,7 +379,7 @@ export default function XRedesign() {
                 <div key={i} className={`flex flex-col gap-4 px-6 py-9 ${i > 0 ? 'border-l border-gray-2/20' : ''}`}>
                   <MoodFace mood={cell.mood} className="size-6" />
                   <p className="text-[20px] leading-snug tracking-[-0.8px]">{cell.step}</p>
-                  <p className="text-[16px] leading-snug tracking-[-0.64px] text-gray-2">{cell.pain}</p>
+                  <p className="text-[20px] leading-snug tracking-[-0.8px] text-gray-2">{cell.pain}</p>
                 </div>
               ))}
             </div>
