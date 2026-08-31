@@ -5,7 +5,7 @@ export default function Footer() {
     <footer className="flex items-end justify-between">
       <div className="text-[24px] text-black tracking-[-0.96px] leading-normal">
         <p className="m-0">© Amy Wang, 2026</p>
-        <p className="m-0">built and designed with love and lots of podcasts</p>
+        <p className="m-0 hidden sm:block">built and designed with love and lots of podcasts</p>
       </div>
       <div className="flex gap-12 items-center">
         <a

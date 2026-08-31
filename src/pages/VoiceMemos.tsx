@@ -2,12 +2,15 @@ import Layout from '../components/Layout'
 import ScrollMorph from '../components/ScrollMorph'
 import MorphingFlowChart from '../components/MorphingFlowChart'
 import { searchBefore, searchAfter, menuBefore, menuAfter } from '../data/architectureFlows'
-import heroArt from '../assets/images/case-study/hero-art.png'
-import competitorLogos from '../assets/images/case-study/competitor-logos.png'
-import competitorScreenshot1 from '../assets/images/case-study/competitor-screenshot-1.png'
-import competitorScreenshot2 from '../assets/images/case-study/competitor-screenshot-2.png'
+import heroArt from '../assets/images/case-study/voice-memos-hero.png'
 import affinityMapping from '../assets/images/case-study/affinity-mapping.png'
 import personaInformedIssac from '../assets/images/case-study/persona-informed-issac.png'
+import logoEasyVoiceRecorder from '../assets/images/case-study/logo-easy-voice-recorder.png'
+import logoRev from '../assets/images/case-study/logo-rev.png'
+import logoEvernote from '../assets/images/case-study/logo-evernote.png'
+import logoMotivAudio from '../assets/images/case-study/logo-motiv-audio.png'
+import logoOtterAi from '../assets/images/case-study/logo-otter-ai.png'
+import logoBandlab from '../assets/images/case-study/logo-bandlab.png'
 import sketch1 from '../assets/images/case-study/sketch-1.png'
 import sketch2 from '../assets/images/case-study/sketch-2.png'
 import lowfiSidenav from '../assets/images/case-study/lowfi-sidenav.png'
@@ -23,17 +26,37 @@ import finalProductTagsSearch from '../assets/images/case-study/final-product-ta
 const CARD_SHADOW = 'shadow-[0_20px_35px_-12px_rgba(0,0,0,0.25)]'
 
 const metaItems = [
-  { label: 'timeline', value: 'January - May 2026' },
-  { label: 'team', value: '1 Lead, 4 Designers' },
+  { label: 'timeline', value: 'Sept - Dec 2025' },
+  { label: 'team', value: '1 Lead, 5 Designers' },
   { label: 'role', value: 'Designer' },
   { label: 'skills', value: 'Figma' },
 ]
 
+const COMPETITOR_GRID = 'grid grid-cols-[286px_repeat(5,1fr)_72px] items-center gap-x-3 pb-6'
+
+const competitorCols = ['organization', 'personalization', 'sharing', 'ai / smart', 'visual clarity']
+
+/** 2 = strong, 1 = limited, 0 = missing — in column order above. */
+const competitors = [
+  { name: 'Easy Voice Recorder', logo: logoEasyVoiceRecorder, scores: [1, 1, 1, 1, 2], price: 'paid' },
+  { name: 'Rev', logo: logoRev, scores: [1, 1, 1, 1, 1], price: 'paid' },
+  { name: 'Evernote', logo: logoEvernote, scores: [2, 2, 2, 2, 2], price: 'paid' },
+  { name: 'MOTIV Audio', logo: logoMotivAudio, scores: [2, 1, 1, 0, 2], price: 'free' },
+  { name: 'Otter.ai', logo: logoOtterAi, scores: [2, 2, 2, 2, 2], price: 'paid' },
+  { name: 'BandLab', logo: logoBandlab, scores: [1, 2, 2, 2, 0], price: 'paid' },
+]
+
+const ratingLegend: [number, string][] = [
+  [2, 'strong'],
+  [1, 'limited/basic'],
+  [0, 'missing'],
+]
+
 const painPoints = [
-  { text: 'Lists and Communities overlap — combine and rename', iconFirst: false },
-  { text: 'Buttons throughout the UI sit too close together and read too small', iconFirst: true },
-  { text: 'Side nav and low nav bar needed a clearer information architecture', iconFirst: false },
-  { text: 'Many different nav bars and tab sections made searching confusing', iconFirst: true },
+  { text: 'Difficult to categorize recordings beyond basic folders', iconFirst: false },
+  { text: 'Lacks sorting and content-based search to find recordings fast', iconFirst: true },
+  { text: 'No speech-to-text, AI summaries, translation, or smart naming', iconFirst: false },
+  { text: 'Recording controls are hard to find and lack countdowns', iconFirst: true },
 ]
 
 const insights = [
@@ -70,6 +93,34 @@ const journey = [
   { step: 'Searches, filters to verified', pain: 'Too many taps to get there', mood: 2 },
   { step: 'Half the results are paid checkmarks', pain: 'Credible and paid look identical', mood: 2 },
 ]
+
+/** Status marks for the competitor matrix, drawn to match MoodFace's line work.
+    Colour carries the scale at a glance; the shapes still tell them apart without it. */
+const statusColor = ['text-red-600', 'text-amber-500', 'text-teal-500']
+
+function StatusIcon({ level, className }: { level: number; className?: string }) {
+  const mark = [
+    <>
+      <path d="M7 7 L13 13" strokeLinecap="round" />
+      <path d="M13 7 L7 13" strokeLinecap="round" />
+    </>,
+    <path d="M6.4 10 L13.6 10" strokeLinecap="round" />,
+    <path d="M6.2 10.2 L8.9 12.9 L13.8 7.3" strokeLinecap="round" strokeLinejoin="round" />,
+  ][level]
+  return (
+    <svg
+      viewBox="0 0 20 20"
+      className={`${statusColor[level]} ${className ?? ''}`}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.6"
+      aria-hidden="true"
+    >
+      <circle cx="10" cy="10" r="8.5" />
+      {mark}
+    </svg>
+  )
+}
 
 /** Five-step mood scale, drawn to match the site's flat black-on-white line work. */
 function MoodFace({ mood, className }: { mood: number; className?: string }) {
@@ -148,24 +199,27 @@ function PairedVersionCard({
   )
 }
 
-export default function XRedesign() {
+export default function VoiceMemos() {
   return (
     <Layout>
       <div className="mx-auto w-[1056px] max-w-full">
         {/* Hero */}
         <div className="mt-16 h-[400px] w-full overflow-hidden rounded-2xl bg-gray-2/10">
-          <img src={heroArt} alt="X Redesign hero collage" className="size-full object-cover" />
+          <img src={heroArt} alt="Apple Voice Memos redesign hero" className="size-full object-cover" />
         </div>
 
-        <div className="mt-1 flex items-baseline">
-          <span className="font-pixel text-[165px] leading-none mr-[16px]">X</span>
+        <div className="mt-1 flex items-baseline whitespace-nowrap">
+          <span className="font-pixel text-[165px] leading-none mr-[-48px]">V</span>
+          <span className="text-[80px] leading-none tracking-[-3.2px] mr-[24px]">oice</span>
+          <span className="font-pixel text-[165px] leading-none">M</span>
+          <span className="text-[80px] leading-none tracking-[-3.2px] mr-[24px]">emos</span>
           <span className="font-pixel text-[165px] leading-none mr-[-8px]">R</span>
           <span className="text-[80px] leading-none tracking-[-3.2px]">edesign</span>
         </div>
 
         <p className="text-[24px] tracking-[-0.96px]">
-          Simplifying X for a more intuitive experience, with my work focused on Trending, side navigation, and
-          search.
+          Reduced clutter and added smarter folders to Apple&rsquo;s Voice Memos, making recordings searchable and
+          easy to organize.
         </p>
 
         <div className="mt-12 w-full border-t border-gray-2/20" />
@@ -204,71 +258,48 @@ export default function XRedesign() {
           </div>
         </section>
 
-        {/* Competitor analysis */}
+        {/* Competitor analysis — a feature matrix. Colour is doing all the work in
+            the research doc, so it is rebuilt here as filled / half / empty marks
+            that survive the site's flat black-on-white palette. */}
         <section className="mt-24">
           <p className="mb-[37px] text-[20px] text-gray-2 tracking-[-0.8px]">competitor analysis</p>
-          <div className="flex w-full items-stretch overflow-hidden rounded-3xl bg-white">
-            {/* Left half: stat + logos above the rule, strengths/weaknesses below */}
-            <div className="flex w-1/2 flex-col">
-              <div className="flex items-stretch">
-                <div className="flex w-[42%] items-center justify-center py-10">
-                  {/* pixel glyphs sit low in their line box; nudge up to optically centre */}
-                  <div className="-translate-y-[18px]">
-                    <PixelStat value="5" label="Competitors" />
-                  </div>
-                </div>
-                <div className="flex flex-1 items-center justify-center border-l border-gray-2/20 py-10">
-                  <img
-                    src={competitorLogos}
-                    alt="Competitor app logos"
-                    className="h-[144px] w-[223px] object-contain"
-                  />
-                </div>
-              </div>
-
-              <div className="flex flex-1 flex-col justify-center gap-12 border-t border-gray-2/20 px-10 py-12">
-                <div className="flex gap-10">
-                  <p className="w-[170px] shrink-0 text-[24px] text-gray-2 tracking-[-0.96px]">Strengths</p>
-                  <div className="text-[24px] tracking-[-0.96px]">
-                    <p>Strong community features</p>
-                    <p>Customizable feeds</p>
-                    <p>Better content controls</p>
-                  </div>
-                </div>
-                <div className="flex gap-10">
-                  <p className="w-[170px] shrink-0 text-[24px] text-gray-2 tracking-[-0.96px]">Weaknesses</p>
-                  <div className="text-[24px] tracking-[-0.96px]">
-                    <p>Crowded UI</p>
-                    <p>Confusing icons</p>
-                    <p>Large ads</p>
-                    <p>Feed learning curve</p>
-                  </div>
-                </div>
-              </div>
+          <div className="w-full overflow-hidden rounded-3xl bg-white px-10 py-9">
+            <div className={COMPETITOR_GRID}>
+              <p className="text-[20px] text-gray-2 tracking-[-0.8px]">app</p>
+              {competitorCols.map((c) => (
+                <p key={c} className="text-center text-[20px] text-gray-2 tracking-[-0.8px]">
+                  {c}
+                </p>
+              ))}
+              <p className="text-right text-[20px] text-gray-2 tracking-[-0.8px]">pricing</p>
             </div>
 
-            {/* Right half: the two competitor screenshots */}
-            <div className="flex w-1/2 items-center gap-8 border-l border-gray-2/20 px-10 py-10">
-              <figure className="flex-1">
-                <img
-                  src={competitorScreenshot1}
-                  alt="Competitor screenshot showing organized subsections"
-                  className="w-full rounded-[4px] border-8 border-white object-cover shadow-[0_20px_35px_-12px_rgba(0,0,0,0.25)]"
-                />
-                <figcaption className="mt-5 text-[20px] tracking-[-0.8px]">
-                  Subsections are more organized and curated for the user specifically
-                </figcaption>
-              </figure>
-              <figure className="flex-1">
-                <img
-                  src={competitorScreenshot2}
-                  alt="Competitor screenshot showing overcrowded UI"
-                  className="w-full rounded-[4px] border-8 border-white object-cover shadow-[0_20px_35px_-12px_rgba(0,0,0,0.25)]"
-                />
-                <figcaption className="mt-5 text-[20px] tracking-[-0.8px]">
-                  However, screens can get overcrowded with icons and text
-                </figcaption>
-              </figure>
+            {competitors.map((row) => (
+              <div key={row.name} className={`${COMPETITOR_GRID} border-t border-gray-2/20 py-6`}>
+                <div className="flex items-center gap-4">
+                  <img
+                    src={row.logo}
+                    alt=""
+                    className="size-10 shrink-0 rounded-[10px] object-cover shadow-[0_1px_4px_0_rgba(0,0,0,0.18)]"
+                  />
+                  <p className="text-[24px] leading-tight tracking-[-0.96px]">{row.name}</p>
+                </div>
+                {row.scores.map((s, i) => (
+                  <div key={i} className="flex justify-center">
+                    <StatusIcon level={s} className="size-6" />
+                  </div>
+                ))}
+                <p className="text-right text-[20px] text-gray-2 tracking-[-0.8px]">{row.price}</p>
+              </div>
+            ))}
+
+            <div className="flex items-center gap-8 border-t border-gray-2/20 pt-6">
+              {ratingLegend.map(([level, label]) => (
+                <div key={label} className="flex items-center gap-2">
+                  <StatusIcon level={level} className="size-5" />
+                  <p className="text-[20px] text-gray-2 tracking-[-0.8px]">{label}</p>
+                </div>
+              ))}
             </div>
           </div>
         </section>
@@ -282,7 +313,7 @@ export default function XRedesign() {
                 <div className="flex items-center gap-8">
                   {/* pixel glyphs sit low in their line box; nudge up to optically centre */}
                   <div className="-translate-y-[18px]">
-                    <PixelStat value="10" label="Interviewees" />
+                    <PixelStat value="12" label="Interviewees" />
                   </div>
                   <p className="flex-1 text-[24px] tracking-[-0.96px]">
                     We asked peers with &amp; without X experience to test three user flows, documenting their

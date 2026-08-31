@@ -13,7 +13,7 @@ import thumbWcsImpact from '../assets/images/thumb-wcs-impact.png'
 
 const projects = [
   { title: 'X Redesign', meta: '2026 · app redesign', image: thumbXRedesign, to: '/projects/x-redesign' },
-  { title: 'Apple Voice Memos Redesign', meta: '2025 · app redesign', image: thumbVoiceMemos },
+  { title: 'Apple Voice Memos Redesign', meta: '2025 · app redesign', image: thumbVoiceMemos, to: '/projects/voice-memos' },
   { title: 'Psi Eta Mu Website', meta: '2026 · web design', image: thumbPsiEtaMu },
   { title: 'Lost & Found', meta: '2025 · app design', image: thumbLostFound },
   { title: 'WCS Impact Map & Wrapped', meta: '2026 · web design', image: thumbWcsImpact },
