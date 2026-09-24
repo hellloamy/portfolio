@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
 import Layout from '../components/Layout'
 import ScrollMorph from '../components/ScrollMorph'
 import MorphingFlowChart from '../components/MorphingFlowChart'
@@ -149,6 +151,22 @@ function PairedVersionCard({
 }
 
 export default function XRedesign() {
+  const [mapOpen, setMapOpen] = useState(false)
+
+  useEffect(() => {
+    if (!mapOpen) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setMapOpen(false)
+    }
+    window.addEventListener('keydown', onKey)
+    const prev = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      window.removeEventListener('keydown', onKey)
+      document.body.style.overflow = prev
+    }
+  }, [mapOpen])
+
   return (
     <Layout>
       <div className="mx-auto w-[1056px] max-w-full">
@@ -289,11 +307,20 @@ export default function XRedesign() {
                     frustrations and critiques.
                   </p>
                 </div>
-                <img
-                  src={affinityMapping}
-                  alt="Affinity mapping of interview notes"
-                  className="w-full rounded-xl object-cover"
-                />
+                {/* The board is far too dense to read at card width, so it opens full-screen. */}
+                <button
+                  type="button"
+                  onClick={() => setMapOpen(true)}
+                  className="group relative block w-full overflow-hidden rounded-xl"
+                  aria-label="Expand the affinity map"
+                >
+                  <img src={affinityMapping} alt="Affinity mapping of interview notes" className="block w-full" />
+                  <span className="absolute inset-0 flex items-center justify-center bg-black/0 transition-colors duration-200 group-hover:bg-black/40">
+                    <span className="text-[20px] tracking-[-0.8px] text-white opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+                      click to expand
+                    </span>
+                  </span>
+                </button>
               </div>
             </div>
             <div className="flex w-[525px] flex-col">
@@ -499,6 +526,25 @@ export default function XRedesign() {
           </div>
         </section>
       </div>
+
+      {/* Portalled to <body> so the page's 66.667% zoom doesn't shrink the overlay. */}
+      {mapOpen &&
+        createPortal(
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-label="Affinity map"
+            onClick={() => setMapOpen(false)}
+            className="fixed inset-0 z-50 flex cursor-zoom-out items-center justify-center bg-black/80 p-8"
+          >
+            <img
+              src={affinityMapping}
+              alt="Affinity mapping of interview notes"
+              className="max-h-full max-w-full rounded-lg object-contain"
+            />
+          </div>,
+          document.body,
+        )}
     </Layout>
   )
 }

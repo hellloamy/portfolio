@@ -1,9 +1,11 @@
+import { useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
 import Layout from '../components/Layout'
 import ScrollMorph from '../components/ScrollMorph'
 import MorphingFlowChart from '../components/MorphingFlowChart'
 import { searchBefore, searchAfter, menuBefore, menuAfter } from '../data/architectureFlows'
 import heroArt from '../assets/images/case-study/voice-memos-hero.png'
-import affinityMapping from '../assets/images/case-study/affinity-mapping.png'
+import affinityMapping from '../assets/images/case-study/vm-affinity-mapping.png'
 import personaInformedIssac from '../assets/images/case-study/persona-informed-issac.png'
 import logoEasyVoiceRecorder from '../assets/images/case-study/logo-easy-voice-recorder.png'
 import logoRev from '../assets/images/case-study/logo-rev.png'
@@ -60,10 +62,9 @@ const painPoints = [
 ]
 
 const insights = [
-  { n: '1', text: 'Combine Lists and Communities; change the naming' },
-  { n: '2', text: 'Combine Quote and Repost into one option, letting users add a comment or repost without one.' },
-  { n: '3', text: 'Reduce clutter and button density by removing unnecessary icons (Ex. views icon)' },
-  { n: '4', text: 'Restructure side and low nav bars; move notifications to corner' },
+  { n: '1', text: 'Let users personalize recordings with colors, icons, and folders so the app feels like their own' },
+  { n: '2', text: 'Auto-generate summaries so users can tell what a recording holds at a glance' },
+  { n: '3', text: 'Lean into brainstorming — Voice Memos is where thinking starts, not where work gets finished' },
 ]
 
 const finalProduct = [
@@ -163,12 +164,16 @@ function PixelStat({ value, label }: { value: string; label: string }) {
   )
 }
 
-function InsightCell({ insight, className }: { insight: { n: string; text: string }; className?: string }) {
+/** Three insights read better stacked than in a grid, so the numeral sits beside
+    the text rather than above it. */
+function InsightRow({ insight, className }: { insight: { n: string; text: string }; className?: string }) {
   return (
-    <div className={`flex flex-1 flex-col items-center px-6 py-10 text-center ${className ?? ''}`}>
+    <div className={`flex flex-1 items-center gap-8 px-10 py-8 ${className ?? ''}`}>
       {/* pixel glyphs sit low in their line box; nudge up to optically centre */}
-      <p className="font-pixel text-[165px] leading-none -mb-4 -translate-y-[18px]">{insight.n}</p>
-      <p className="text-[24px] tracking-[-0.96px]">{insight.text}</p>
+      <p className="w-[72px] shrink-0 text-center font-pixel text-[140px] leading-none -translate-y-[15px]">
+        {insight.n}
+      </p>
+      <p className="flex-1 text-[24px] tracking-[-0.96px]">{insight.text}</p>
     </div>
   )
 }
@@ -200,6 +205,22 @@ function PairedVersionCard({
 }
 
 export default function VoiceMemos() {
+  const [mapOpen, setMapOpen] = useState(false)
+
+  useEffect(() => {
+    if (!mapOpen) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setMapOpen(false)
+    }
+    window.addEventListener('keydown', onKey)
+    const prev = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      window.removeEventListener('keydown', onKey)
+      document.body.style.overflow = prev
+    }
+  }, [mapOpen])
+
   return (
     <Layout>
       <div className="mx-auto w-[1056px] max-w-full">
@@ -309,39 +330,57 @@ export default function VoiceMemos() {
           <div className="flex w-full flex-wrap items-stretch gap-11">
             <div className="flex w-[484px] flex-col">
               <p className="mb-[37px] text-[20px] text-gray-2 tracking-[-0.8px]">user interviews &amp; affinity mapping</p>
-              <div className="flex w-full flex-1 flex-col justify-center gap-20 rounded-3xl bg-white px-10 py-10">
+              <div className="flex w-full flex-1 flex-col justify-center gap-12 rounded-3xl bg-white px-10 py-10">
                 <div className="flex items-center gap-8">
                   {/* pixel glyphs sit low in their line box; nudge up to optically centre */}
                   <div className="-translate-y-[18px]">
                     <PixelStat value="12" label="Interviewees" />
                   </div>
                   <p className="flex-1 text-[24px] tracking-[-0.96px]">
-                    We asked peers with &amp; without X experience to test three user flows, documenting their
-                    frustrations and critiques.
+                    We asked peers who have experience using recording applications to evaluate the recording
+                    experience, organization &amp; management, accessibility, &amp; personalization of Apple Voice
+                    Memos.
                   </p>
                 </div>
-                <img
-                  src={affinityMapping}
-                  alt="Affinity mapping of interview notes"
-                  className="w-full rounded-xl object-cover"
-                />
+                {/* The board is far too dense to read at card width, so it opens full-screen. */}
+                <button
+                  type="button"
+                  onClick={() => setMapOpen(true)}
+                  className="group relative block w-full overflow-hidden rounded-xl"
+                  aria-label="Expand the affinity map"
+                >
+                  <img src={affinityMapping} alt="Affinity map of interview notes" className="block w-full" />
+                  <span className="absolute inset-0 flex items-center justify-center bg-black/0 transition-colors duration-200 group-hover:bg-black/40">
+                    <span className="text-[20px] tracking-[-0.8px] text-white opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+                      click to expand
+                    </span>
+                  </span>
+                </button>
               </div>
             </div>
             <div className="flex w-[525px] flex-col">
               <p className="mb-[37px] text-[20px] text-gray-2 tracking-[-0.8px]">synthesis — what should be done?</p>
-              {/* Two independent columns so each cell's rule sits directly below its own
-                  content — giving every number + description the same padding. */}
-              <div className="flex w-full items-stretch overflow-hidden rounded-3xl bg-white">
-                <div className="flex flex-1 flex-col">
-                  <InsightCell insight={insights[0]} />
-                  <InsightCell insight={insights[2]} className="border-t border-gray-2/20" />
-                </div>
-                <div className="flex flex-1 flex-col border-l border-gray-2/20">
-                  <InsightCell insight={insights[1]} />
-                  <InsightCell insight={insights[3]} className="border-t border-gray-2/20" />
-                </div>
+              <div className="flex w-full flex-1 flex-col overflow-hidden rounded-3xl bg-white">
+                {insights.map((insight, i) => (
+                  <InsightRow
+                    key={insight.n}
+                    insight={insight}
+                    className={i > 0 ? 'border-t border-gray-2/20' : ''}
+                  />
+                ))}
               </div>
             </div>
+          </div>
+        </section>
+
+        {/* How might we — the framing is set in gray so the question itself carries the weight. */}
+        <section className="mt-24">
+          <p className="mb-[37px] text-[20px] text-gray-2 tracking-[-0.8px]">how might we</p>
+          <div className="w-full rounded-3xl bg-white px-16 py-14">
+            <p className="text-[32px] leading-snug tracking-[-1.28px]">
+              <span className="text-gray-2">How might we</span> create visual organization methods like
+              AI-generated summaries to further simplify and facilitate the usage of Voice Memos?
+            </p>
           </div>
         </section>
 
@@ -530,6 +569,25 @@ export default function VoiceMemos() {
           </div>
         </section>
       </div>
+
+      {/* Portalled to <body> so the page's 66.667% zoom doesn't shrink the overlay. */}
+      {mapOpen &&
+        createPortal(
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-label="Affinity map"
+            onClick={() => setMapOpen(false)}
+            className="fixed inset-0 z-50 flex cursor-zoom-out items-center justify-center bg-black/80 p-8"
+          >
+            <img
+              src={affinityMapping}
+              alt="Affinity map of interview notes"
+              className="max-h-full max-w-full rounded-lg object-contain"
+            />
+          </div>,
+          document.body,
+        )}
     </Layout>
   )
 }
