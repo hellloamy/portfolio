@@ -20,6 +20,7 @@
   --color-teal-300: #72e9f0;
   --color-teal-400: #32dfe8;
   --color-teal-500: #00c6d0;
+  --color-amber-500: #e8a33d;
   --color-red-600: #e46167;
 }
 
@@ -82,6 +83,54 @@ body {
   .photobooth-drop {
     animation: none;
   }
+}
+
+/* Intro splash: an 18-frame sprite strip stepped through one frame at a time.
+   A sprite beats an animated GIF/WebP here — exact duration control, and it
+   reliably holds the final frame instead of snapping back to the first. */
+/* 18 frames at 180px (source is 200px wide, shown at 90%). Stepping to the LAST
+   frame's offset (-3060px) over 17 steps lands on frame 18; going the full
+   -3240px would leave the final step one frame past the strip, showing blank. */
+@keyframes intro-sprite {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: -3060px 0;
+  }
+}
+
+.intro-sprite {
+  width: 180px;
+  height: 126px;
+  background-image: var(--intro-sprite-src);
+  background-size: 3240px 126px;
+  background-repeat: no-repeat;
+  image-rendering: pixelated;
+  animation: intro-sprite 1.7s steps(17) 1 both;
+}
+
+/* The pusher: a 2-frame cycle that loops while she shoves the panel off-screen.
+   Source frames are 260x340, shown at ~46%. Unlike the play-once cursive, a
+   looping strip steps to the FULL sheet width so the two frames land on 0 and
+   -120px; ending at one frame width would park it half-way between poses. */
+@keyframes intro-pusher {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: -240px 0;
+  }
+}
+
+.intro-pusher {
+  width: 120px;
+  height: 157px;
+  background-image: var(--intro-pusher-src);
+  background-size: 240px 157px;
+  background-repeat: no-repeat;
+  image-rendering: pixelated;
+  animation: intro-pusher 0.5s steps(2) infinite;
 }
 
 @keyframes chevron-pulse {

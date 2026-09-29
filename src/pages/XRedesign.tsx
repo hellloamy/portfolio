@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
 import Layout from '../components/Layout'
 import ScrollMorph from '../components/ScrollMorph'
 import MorphingFlowChart from '../components/MorphingFlowChart'
@@ -16,9 +18,9 @@ import midfiSidenav from '../assets/images/case-study/midfi-sidenav.png'
 import midfiTrending from '../assets/images/case-study/midfi-trending.png'
 import version1 from '../assets/images/case-study/version-1.png'
 import version2 from '../assets/images/case-study/version-2.png'
-import finalProductNews from '../assets/images/case-study/final-product-news.gif'
-import finalProductPosts from '../assets/images/case-study/final-product-posts.gif'
-import finalProductTagsSearch from '../assets/images/case-study/final-product-tags-search.gif'
+import finalProductNews from '../assets/images/case-study/final-product-news.mp4'
+import finalProductPosts from '../assets/images/case-study/final-product-posts.mp4'
+import finalProductTagsSearch from '../assets/images/case-study/final-product-tags-search.mp4'
 
 const CARD_SHADOW = 'shadow-[0_20px_35px_-12px_rgba(0,0,0,0.25)]'
 
@@ -46,17 +48,14 @@ const insights = [
 const finalProduct = [
   {
     video: finalProductNews,
-    aspect: 340 / 604,
     lines: ['Side nav simplified from 13 to 8 buttons', 'Trending moved from under search bar to side nav'],
   },
   {
     video: finalProductPosts,
-    aspect: 340 / 609,
     lines: ['Posts over 3 hidden under the view more arrow', 'Post interactions simplified from 6 to 4 core buttons'],
   },
   {
     video: finalProductTagsSearch,
-    aspect: 340 / 609,
     lines: ['Tags over 3 are hidden under the view more arrow', 'Search simplified to recent history with no tabs'],
   },
 ]
@@ -152,6 +151,22 @@ function PairedVersionCard({
 }
 
 export default function XRedesign() {
+  const [mapOpen, setMapOpen] = useState(false)
+
+  useEffect(() => {
+    if (!mapOpen) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setMapOpen(false)
+    }
+    window.addEventListener('keydown', onKey)
+    const prev = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      window.removeEventListener('keydown', onKey)
+      document.body.style.overflow = prev
+    }
+  }, [mapOpen])
+
   return (
     <Layout>
       <div className="mx-auto w-[1056px] max-w-full">
@@ -292,11 +307,20 @@ export default function XRedesign() {
                     frustrations and critiques.
                   </p>
                 </div>
-                <img
-                  src={affinityMapping}
-                  alt="Affinity mapping of interview notes"
-                  className="w-full rounded-xl object-cover"
-                />
+                {/* The board is far too dense to read at card width, so it opens full-screen. */}
+                <button
+                  type="button"
+                  onClick={() => setMapOpen(true)}
+                  className="group relative block w-full overflow-hidden rounded-xl"
+                  aria-label="Expand the affinity map"
+                >
+                  <img src={affinityMapping} alt="Affinity mapping of interview notes" className="block w-full" />
+                  <span className="absolute inset-0 flex items-center justify-center bg-black/0 transition-colors duration-200 group-hover:bg-black/40">
+                    <span className="text-[20px] tracking-[-0.8px] text-white opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+                      click to expand
+                    </span>
+                  </span>
+                </button>
               </div>
             </div>
             <div className="flex w-[525px] flex-col">
@@ -484,10 +508,13 @@ export default function XRedesign() {
           <div className="flex w-full gap-6">
             {finalProduct.map((item, i) => (
               <div key={i} className="w-[336px]">
-                <img
+                <video
                   src={item.video}
-                  alt=""
-                  style={{ aspectRatio: item.aspect }}
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  style={{ aspectRatio: 664 / 1192 }}
                   className={`w-full rounded-[20px] object-contain ${CARD_SHADOW}`}
                 />
                 <div className="mt-5 text-[24px] tracking-[-0.96px]">
@@ -499,6 +526,25 @@ export default function XRedesign() {
           </div>
         </section>
       </div>
+
+      {/* Portalled to <body> so the page's 66.667% zoom doesn't shrink the overlay. */}
+      {mapOpen &&
+        createPortal(
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-label="Affinity map"
+            onClick={() => setMapOpen(false)}
+            className="fixed inset-0 z-50 flex cursor-zoom-out items-center justify-center bg-black/80 p-8"
+          >
+            <img
+              src={affinityMapping}
+              alt="Affinity mapping of interview notes"
+              className="max-h-full max-w-full rounded-lg object-contain"
+            />
+          </div>,
+          document.body,
+        )}
     </Layout>
   )
 }
