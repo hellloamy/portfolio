@@ -50,7 +50,7 @@ export default function IntroSplash() {
       className={`fixed inset-0 z-[100] flex items-center justify-center transition-transform duration-[2800ms] ease-linear ${
         state === 'leaving' ? 'translate-x-[calc(100%+120px)]' : 'translate-x-0'
       }`}
-      style={{ backgroundColor: '#ffd6e6' }}
+      style={{ backgroundColor: '#fdd6e5' }}
     >
       {/* rendered at the source's native 200x140 so the pixel grid stays exact */}
       <div className="intro-sprite" style={{ '--intro-sprite-src': `url(${introSprite})` } as React.CSSProperties} />
