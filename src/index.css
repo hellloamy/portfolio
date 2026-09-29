@@ -119,6 +119,15 @@ body {
   background-size: 3240px 126px;
   background-repeat: no-repeat;
   image-rendering: pixelated;
+  /* Stacked drop-shadows trace the sprite's alpha, so the bloom follows the
+     letterform instead of its bounding box. The rose tints sit deeper than the
+     #fdd6e5 panel so the halo actually reads against it, and the slight opacity
+     lets the pink through the strokes for a tinted-glass look. */
+  opacity: 0.92;
+  filter:
+    drop-shadow(0 0 2px rgba(247, 168, 200, 0.5))
+    drop-shadow(0 0 7px rgba(242, 140, 180, 0.32))
+    drop-shadow(0 0 16px rgba(236, 115, 162, 0.18));
   animation: intro-sprite 1.7s steps(17) 1 both;
 }
 
