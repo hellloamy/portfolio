@@ -1,4 +1,5 @@
 import Layout from '../components/Layout'
+import IntroSplash from '../components/IntroSplash'
 import ProjectCard from '../components/ProjectCard'
 import SpinningCd from '../components/SpinningCd'
 import WinkingFace from '../components/WinkingFace'
@@ -45,6 +46,9 @@ export default function Home() {
   return (
     <Layout>
       <>
+        {/* Home only, and it replays on every mount rather than once per session. */}
+        <IntroSplash />
+
         {/* Hero — tight bounding box around just the wordmark cluster, centered in one viewport */}
         <div className="relative hidden min-h-[calc(150vh-90px)] items-center justify-center md:flex">
           <div className="relative -translate-y-32 h-[429px] w-[1106px] shrink-0">

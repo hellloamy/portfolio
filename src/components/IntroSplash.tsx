@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
+import { useNavigationType } from 'react-router-dom'
 import introSprite from '../assets/images/intro-pixel-sprite.png'
 import pusherSprite from '../assets/images/intro-pusher-sprite.png'
 
@@ -9,38 +10,32 @@ const EXIT_MS = 2800
 
 /** Read-only so it stays safe to call during render, including StrictMode's double pass. */
 function canPlay() {
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return false
-  // ?splash forces a replay — the once-per-session rule otherwise makes this
-  // near-impossible to preview without clearing storage by hand.
-  if (new URLSearchParams(window.location.search).has('splash')) return true
-  try {
-    return !sessionStorage.getItem('intro-played')
-  } catch {
-    // Storage blocked (private browsing). Play it; we just can't remember we did.
-    return true
-  }
+  return !window.matchMedia('(prefers-reduced-motion: reduce)').matches
 }
 
 type State = 'playing' | 'leaving' | 'done'
 
 export default function IntroSplash() {
+  // 'POP' is what a fresh document load reports; clicking a link in the nav reports
+  // 'PUSH', so this fires on refresh but not on in-site navigation. A module-level
+  // "already played" flag would not work here — StrictMode's double mount would
+  // consume it and swallow the splash in development.
+  const navigationType = useNavigationType()
+
   // Decided during the first render so the page never flashes before the splash covers it.
-  const [state, setState] = useState<State>(() => (canPlay() ? 'playing' : 'done'))
+  const [state, setState] = useState<State>(() =>
+    canPlay() && navigationType === 'POP' ? 'playing' : 'done',
+  )
 
   useEffect(() => {
     if (state !== 'playing') return
-    try {
-      sessionStorage.setItem('intro-played', '1')
-    } catch {
-      /* nothing to do — see canPlay */
-    }
     const toLeave = setTimeout(() => setState('leaving'), PLAY_MS)
     const toDone = setTimeout(() => setState('done'), PLAY_MS + EXIT_MS)
     return () => {
       clearTimeout(toLeave)
       clearTimeout(toDone)
     }
-    // Runs once: the splash only ever plays on the first render of a visit.
+    // Runs once per mount — the home page remounting is what replays it.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
