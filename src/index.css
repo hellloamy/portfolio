@@ -28,6 +28,18 @@
   box-sizing: border-box;
 }
 
+/* Pink dot in place of the system cursor. Applied to everything so links and
+   buttons don't fall back to the UA's pointer hand. The 12 12 offset centres
+   the hotspot on the circle rather than its top-left corner. */
+*,
+*::before,
+*::after {
+  cursor:
+    url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"><circle cx="12" cy="12" r="9" fill="%23fdd6e5"/></svg>')
+      12 12,
+    auto;
+}
+
 html,
 body {
   margin: 0;
