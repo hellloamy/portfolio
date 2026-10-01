@@ -1,9 +1,6 @@
 import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import Layout from '../components/Layout'
-import ScrollMorph from '../components/ScrollMorph'
-import MorphingFlowChart from '../components/MorphingFlowChart'
-import { searchBefore, searchAfter, menuBefore, menuAfter } from '../data/architectureFlows'
 import heroArt from '../assets/images/case-study/voice-memos-hero.png'
 import affinityMapping from '../assets/images/case-study/vm-affinity-mapping.png'
 import personaInformedIssac from '../assets/images/case-study/persona-informed-issac.png'
@@ -13,17 +10,11 @@ import logoEvernote from '../assets/images/case-study/logo-evernote.png'
 import logoMotivAudio from '../assets/images/case-study/logo-motiv-audio.png'
 import logoOtterAi from '../assets/images/case-study/logo-otter-ai.png'
 import logoBandlab from '../assets/images/case-study/logo-bandlab.png'
-import sketch1 from '../assets/images/case-study/sketch-1.png'
-import sketch2 from '../assets/images/case-study/sketch-2.png'
-import lowfiSidenav from '../assets/images/case-study/lowfi-sidenav.png'
-import lowfiForYou from '../assets/images/case-study/lowfi-foryou.png'
-import midfiSidenav from '../assets/images/case-study/midfi-sidenav.png'
-import midfiTrending from '../assets/images/case-study/midfi-trending.png'
-import version1 from '../assets/images/case-study/version-1.png'
-import version2 from '../assets/images/case-study/version-2.png'
-import finalProductNews from '../assets/images/case-study/final-product-news.mp4'
-import finalProductPosts from '../assets/images/case-study/final-product-posts.mp4'
-import finalProductTagsSearch from '../assets/images/case-study/final-product-tags-search.mp4'
+import vmLowfi1 from '../assets/images/case-study/vm-lowfi-1.webp'
+import vmLowfi2 from '../assets/images/case-study/vm-lowfi-2.webp'
+import vmMidfi from '../assets/images/case-study/vm-midfi.webp'
+import vmFinalCurrent from '../assets/images/case-study/vm-final-current.webp'
+import vmFinalRedesign from '../assets/images/case-study/vm-final-redesign.mp4'
 
 const CARD_SHADOW = 'shadow-[0_20px_35px_-12px_rgba(0,0,0,0.25)]'
 
@@ -67,24 +58,9 @@ const insights = [
   { n: '3', text: 'Lean into brainstorming — Voice Memos is where thinking starts, not where work gets finished' },
 ]
 
-const finalProduct = [
-  {
-    video: finalProductNews,
-    lines: ['Side nav simplified from 13 to 8 buttons', 'Trending moved from under search bar to side nav'],
-  },
-  {
-    video: finalProductPosts,
-    lines: ['Posts over 3 hidden under the view more arrow', 'Post interactions simplified from 6 to 4 core buttons'],
-  },
-  {
-    video: finalProductTagsSearch,
-    lines: ['Tags over 3 are hidden under the view more arrow', 'Search simplified to recent history with no tabs'],
-  },
-]
-
 const persona = {
-  meta: '42 · software engineer · new york',
-  needs: ['verified-only filtering', 'clear parody + satire labels', 'a cleaner homepage'],
+  meta: '15 · singer/songwriter · kauai, hi',
+  needs: ['a simple ui', 'excellent audio quality', 'a tutorial for new users'],
 }
 
 const journey = [
@@ -174,32 +150,6 @@ function InsightRow({ insight, className }: { insight: { n: string; text: string
         {insight.n}
       </p>
       <p className="flex-1 text-[24px] tracking-[-0.96px]">{insight.text}</p>
-    </div>
-  )
-}
-
-function PairedVersionCard({
-  number,
-  title,
-  pros,
-  cons,
-}: {
-  number: string
-  title: string
-  pros: string
-  cons: string
-}) {
-  return (
-    <div className="flex flex-col items-center gap-12">
-      <PixelStat value={number} label={title} />
-      <div className="text-[24px] tracking-[-0.96px]">
-        <p>
-          <span className="text-[20px] text-gray-2">pros</span> {pros}
-        </p>
-        <p className="mt-4">
-          <span className="text-[20px] text-gray-2">cons</span> {cons}
-        </p>
-      </div>
     </div>
   )
 }
@@ -384,37 +334,6 @@ export default function VoiceMemos() {
           </div>
         </section>
 
-        {/* Redesigned info architecture — both flows render at the same px-per-unit
-            scale so their boxes read as the same size, then are cascaded within one
-            shared card the way the original design lays them out. Scrolling through
-            this section pins the card and crossfades each flow from its cluttered
-            "before" state into the simplified redesign. */}
-        <section className="mt-24">
-          <ScrollMorph>
-            {(progress) => (
-              <>
-                <p className="mb-[37px] text-[20px] text-gray-2 tracking-[-0.8px]">
-                  {progress < 0.5 ? 'original info architecture' : 'redesigned info architecture'}
-                </p>
-                <div className="relative h-[930px] w-full rounded-3xl bg-white">
-                  <p className="absolute left-10 top-[41.5px] text-[20px] text-gray-2 tracking-[-0.8px]">
-                    tabs under search &amp; trending
-                  </p>
-                  <div className="absolute left-[170px] top-[81.5px]">
-                    <MorphingFlowChart before={searchBefore} after={searchAfter} scale={0.65} progress={progress} />
-                  </div>
-                  <div className="absolute left-10 top-[393.5px]">
-                    <MorphingFlowChart before={menuBefore} after={menuAfter} scale={0.65} progress={progress} />
-                  </div>
-                  <p className="absolute right-10 top-[858.5px] text-[20px] text-gray-2 tracking-[-0.8px]">
-                    side navigation
-                  </p>
-                </div>
-              </>
-            )}
-          </ScrollMorph>
-        </section>
-
         {/* User personas & journey mapping — one card: who he is, then where the
             current flow loses him, step by step. */}
         <section className="mt-24">
@@ -424,12 +343,12 @@ export default function VoiceMemos() {
             <div className="flex items-center gap-8 px-10 py-9">
               <img
                 src={personaInformedIssac}
-                alt="Illustrated portrait of Informed Issac"
+                alt="Illustrated portrait of the persona"
                 className="size-[104px] shrink-0 rounded-2xl object-cover"
               />
               <div>
-                <p className="text-[32px] leading-none tracking-[-1.28px]">Informed Issac</p>
-                <p className="mt-3 text-[20px] text-gray-2 tracking-[-0.8px]">occasional user · {persona.meta}</p>
+                <p className="text-[32px] leading-none tracking-[-1.28px]">Stitch</p>
+                <p className="mt-3 text-[20px] text-gray-2 tracking-[-0.8px]">bandlab user · {persona.meta}</p>
               </div>
               <div className="ml-auto flex flex-col items-end gap-1">
                 <p className="text-[20px] text-gray-2 tracking-[-0.8px]">needs</p>
@@ -453,119 +372,63 @@ export default function VoiceMemos() {
           </div>
         </section>
 
-        {/* Paper sketches / wireframes */}
+        {/* Wireframes — one shot per stage, side by side at a shared height. */}
         <section className="mt-24">
-          <div className="relative h-[1120px] w-full">
-            <div className="absolute left-0 top-0 w-[504px]">
-              <p className="text-[20px] text-gray-2 tracking-[-0.8px]">paper sketches</p>
-              <div className="mt-[37px] flex gap-6">
-                <img
-                  src={sketch1}
-                  alt="Paper sketch: tabs under search"
-                  className={`w-[240px] rounded-2xl ${CARD_SHADOW}`}
-                />
-                <img
-                  src={sketch2}
-                  alt="Paper sketch: side navigation options"
-                  className={`w-[240px] rounded-2xl ${CARD_SHADOW}`}
-                />
-              </div>
+          <div className="flex items-end justify-between">
+            <div>
+              <p className="mb-[37px] text-[20px] text-gray-2 tracking-[-0.8px]">low-fi</p>
+              <img
+                src={vmLowfi1}
+                alt="Low-fidelity folder grid"
+                className={`h-[560px] w-auto rounded-2xl ${CARD_SHADOW}`}
+              />
             </div>
-            <div className="absolute left-0 top-[540px] w-[504px]">
-              <p className="text-[20px] text-gray-2 tracking-[-0.8px]">mid-fi wireframes</p>
-              <div className="mt-[37px] flex gap-6">
-                <img
-                  src={midfiSidenav}
-                  alt="Mid-fidelity side navigation"
-                  className={`w-[240px] rounded-2xl ${CARD_SHADOW}`}
-                />
-                <img
-                  src={midfiTrending}
-                  alt="Mid-fidelity trending page"
-                  className={`w-[240px] rounded-2xl ${CARD_SHADOW}`}
-                />
-              </div>
+
+            <div>
+              <p className="mb-[37px] text-[20px] text-gray-2 tracking-[-0.8px]">low-fi 2</p>
+              <img
+                src={vmLowfi2}
+                alt="Low-fidelity folder list with filter"
+                className={`h-[560px] w-auto rounded-2xl ${CARD_SHADOW}`}
+              />
             </div>
-            <div className="absolute left-[552px] top-[270px] w-[504px]">
-              <p className="text-[20px] text-gray-2 tracking-[-0.8px]">low-fi wireframes</p>
-              <div className="mt-[37px] flex gap-6">
-                <img
-                  src={lowfiSidenav}
-                  alt="Low-fidelity side navigation"
-                  className={`w-[240px] rounded-2xl ${CARD_SHADOW}`}
-                />
-                <img
-                  src={lowfiForYou}
-                  alt="Low-fidelity for you feed"
-                  className={`w-[240px] rounded-2xl ${CARD_SHADOW}`}
-                />
-              </div>
+
+            <div>
+              <p className="mb-[37px] text-[20px] text-gray-2 tracking-[-0.8px]">mid-fi</p>
+              <img
+                src={vmMidfi}
+                alt="Mid-fidelity folder list"
+                className={`h-[560px] w-auto rounded-2xl ${CARD_SHADOW}`}
+              />
             </div>
           </div>
         </section>
 
-        {/* A/B testing */}
-        <section className="mt-24">
-          <p className="mb-[37px] text-[20px] text-gray-2 tracking-[-0.8px]">a/b testing</p>
-          <div className="relative h-[690px] w-full rounded-3xl bg-white">
-            <div className="absolute left-1/2 top-0 h-[600px] -translate-x-1/2 border-l border-gray-2/20" />
-            <div className="absolute inset-x-0 top-[600px] border-t border-gray-2/20" />
-
-            <img
-              src={version1}
-              alt="Version 1 mockup: view more arrows"
-              className={`absolute left-10 top-[68px] w-[214px] rounded-2xl ${CARD_SHADOW}`}
-            />
-            <div className="absolute left-[291px] top-7 w-[197px]">
-              <PairedVersionCard
-                number="1"
-                title="View More Arrows"
-                pros="Keeps users in control and prevents mindless scrolling"
-                cons="Adds click friction and interrupts the visual reading flow"
-              />
-            </div>
-
-            <img
-              src={version2}
-              alt="Version 2 mockup: endless scroll"
-              className={`absolute left-[568px] top-[68px] w-[214px] rounded-2xl ${CARD_SHADOW}`}
-            />
-            <div className="absolute left-[819px] top-[31px] w-[197px]">
-              <PairedVersionCard
-                number="2"
-                title="Endless Scroll"
-                pros="Maximizes feed immersion with uninterrupted browsing"
-                cons="Harder to relocate posts and can cause overload device memory"
-              />
-            </div>
-
-            <p className="absolute inset-x-0 top-[625px] text-center text-[24px] tracking-[-0.96px]">
-              After conducting more user interviews, we went with option 1!
-            </p>
-          </div>
-        </section>
-
-        {/* Final product */}
+        {/* Final product — the shipping app beside the redesign, at a shared height
+            so the two read as a before/after pair. */}
         <section className="mb-16 mt-24">
           <p className="mb-[37px] text-[20px] text-gray-2 tracking-[-0.8px]">final product</p>
-          <div className="flex w-full gap-6">
-            {finalProduct.map((item, i) => (
-              <div key={i} className="w-[336px]">
-                <video
-                  src={item.video}
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                  style={{ aspectRatio: 664 / 1192 }}
-                  className={`w-full rounded-[20px] object-contain ${CARD_SHADOW}`}
-                />
-                <div className="mt-5 text-[24px] tracking-[-0.96px]">
-                  <p>{item.lines[0]}</p>
-                  <p className="mt-4">{item.lines[1]}</p>
-                </div>
-              </div>
-            ))}
+          <div className="flex items-start justify-center gap-16">
+            <div className="flex flex-col items-center">
+              <img
+                src={vmFinalCurrent}
+                alt="Voice Memos as it ships today"
+                className={`h-[620px] w-auto rounded-[20px] border-[40px] border-black ${CARD_SHADOW}`}
+              />
+              <p className="mt-6 text-[24px] tracking-[-0.96px]">current</p>
+            </div>
+
+            <div className="flex flex-col items-center">
+              <video
+                src={vmFinalRedesign}
+                autoPlay
+                loop
+                muted
+                playsInline
+                className={`h-[620px] w-auto rounded-[20px] border-[40px] border-black ${CARD_SHADOW}`}
+              />
+              <p className="mt-6 text-[24px] tracking-[-0.96px]">redesign</p>
+            </div>
           </div>
         </section>
       </div>
