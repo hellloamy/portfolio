@@ -8,6 +8,8 @@ import pusherSprite from '../assets/images/intro-pusher-sprite.png'
 const PLAY_MS = 1900
 const EXIT_MS = 2800
 
+const PANEL_COLOR = '#fdd6e5'
+
 /** Read-only so it stays safe to call during render, including StrictMode's double pass. */
 function canPlay() {
   return !window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -29,11 +31,30 @@ export default function IntroSplash() {
 
   useEffect(() => {
     if (state !== 'playing') return
+
+    // Safari 26 ignores theme-color and instead tints its status bar and toolbar
+    // from the background of a fixed or sticky element sitting at the viewport
+    // edge. A full-bleed `fixed` splash is exactly that, so both bars came out
+    // pink — and since Safari only samples on load, they stayed pink for the whole
+    // visit. Positioning absolutely keeps the panel out of that sample and lets the
+    // bars fall back to the body colour, so the pink reads as one block sliding.
+    // The trade-off is that an absolute panel scrolls, hence the lock and the
+    // reset — a refresh part-way down the page would otherwise start it off-screen.
+    window.scrollTo(0, 0)
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+
     const toLeave = setTimeout(() => setState('leaving'), PLAY_MS)
-    const toDone = setTimeout(() => setState('done'), PLAY_MS + EXIT_MS)
+    // Released here rather than only in cleanup: reaching 'done' renders nothing but
+    // keeps the component mounted, so cleanup alone would leave the page locked.
+    const toDone = setTimeout(() => {
+      setState('done')
+      document.body.style.overflow = previousOverflow
+    }, PLAY_MS + EXIT_MS)
     return () => {
       clearTimeout(toLeave)
       clearTimeout(toDone)
+      document.body.style.overflow = previousOverflow
     }
     // Runs once per mount — the home page remounting is what replays it.
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -47,10 +68,10 @@ export default function IntroSplash() {
   return createPortal(
     <div
       aria-hidden="true"
-      className={`fixed inset-0 z-[100] flex items-center justify-center transition-transform duration-[2800ms] ease-linear ${
+      className={`absolute inset-x-0 top-0 z-[100] h-screen flex items-center justify-center transition-transform duration-[2800ms] ease-linear ${
         state === 'leaving' ? 'translate-x-[calc(100%+120px)]' : 'translate-x-0'
       }`}
-      style={{ backgroundColor: '#fdd6e5' }}
+      style={{ backgroundColor: PANEL_COLOR }}
     >
       {/* rendered at the source's native 200x140 so the pixel grid stays exact */}
       <div className="intro-sprite" style={{ '--intro-sprite-src': `url(${introSprite})` } as React.CSSProperties} />
