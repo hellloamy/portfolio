@@ -12,7 +12,11 @@ const PANEL_COLOR = '#fdd6e5'
 
 /** Read-only so it stays safe to call during render, including StrictMode's double pass. */
 function canPlay() {
-  return !window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return false
+  // Phones sit this one out. iOS fills the status-bar and toolbar strips itself and
+  // they cannot animate along with the panel, so the push always reads as a framed
+  // block rather than the whole screen moving. Same cutoff the hero already uses.
+  return window.matchMedia('(min-width: 768px)').matches
 }
 
 type State = 'playing' | 'leaving' | 'done'
