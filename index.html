@@ -4,10 +4,11 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- Safari 26 tints its top and bottom bars from the page when this is absent,
-         and the blurred sample never quite matches, so a full-bleed colour reads as
-         a band at each edge. Pinning it to the page colour removes the guesswork;
-         the intro splash swaps it to the panel pink while it covers the screen. -->
+    <!-- Mobile Safari paints its status-bar and toolbar areas from this, and tints
+         them off the page itself when it is absent — which turns the intro splash's
+         full-bleed pink into a band above and below the animation. Pinning it to the
+         page colour keeps those bars neutral, so the panel reads as one solid block
+         sliding across rather than a pink frame around a pink screen. -->
     <meta name="theme-color" content="#f9f9f9" />
     <title>portfolio</title>
   </head>

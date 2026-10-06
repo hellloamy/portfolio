@@ -9,15 +9,6 @@ const PLAY_MS = 1900
 const EXIT_MS = 2800
 
 const PANEL_COLOR = '#fdd6e5'
-const PAGE_COLOR = '#f9f9f9'
-
-/** Mobile Safari paints its top and bottom bars from <meta name="theme-color">,
-    falling back to a blurred sample of the page when it is missing. Either way a
-    full-bleed panel ends up framed by a slightly-off band at each edge, so the
-    splash claims the bars for its own pink and hands them back on the way out. */
-function setThemeColor(value: string) {
-  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', value)
-}
 
 /** Read-only so it stays safe to call during render, including StrictMode's double pass. */
 function canPlay() {
@@ -40,18 +31,11 @@ export default function IntroSplash() {
 
   useEffect(() => {
     if (state !== 'playing') return
-    setThemeColor(PANEL_COLOR)
-    // Handed back as the panel starts to slide, since that is the moment the page
-    // underneath begins showing at both edges.
-    const toLeave = setTimeout(() => {
-      setState('leaving')
-      setThemeColor(PAGE_COLOR)
-    }, PLAY_MS)
+    const toLeave = setTimeout(() => setState('leaving'), PLAY_MS)
     const toDone = setTimeout(() => setState('done'), PLAY_MS + EXIT_MS)
     return () => {
       clearTimeout(toLeave)
       clearTimeout(toDone)
-      setThemeColor(PAGE_COLOR)
     }
     // Runs once per mount — the home page remounting is what replays it.
     // eslint-disable-next-line react-hooks/exhaustive-deps
