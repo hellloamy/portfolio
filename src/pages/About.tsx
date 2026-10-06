@@ -4,10 +4,13 @@ import photobooth from '../assets/images/about-photobooth.png'
 export default function About() {
   return (
     <Layout>
-      <div className="absolute inset-0 flex translate-y-[19px] items-center justify-center gap-[220px]">
-        <div className="flex h-[640px] w-[410px] shrink-0 items-center justify-center rounded-[10px] bg-white shadow-[4px_4px_20px_0px_rgba(0,0,0,0.1)]">
+      {/* Side by side needs ~1160px of content width, which only the lg breakpoint
+          clears — below it the pair stacks and returns to normal flow, since the
+          absolute fill is only there to centre the row in the viewport. */}
+      <div className="flex flex-col items-center gap-14 py-16 lg:absolute lg:inset-0 lg:flex-row lg:translate-y-[19px] lg:justify-center lg:gap-[220px] lg:py-0">
+        <div className="flex h-[520px] w-[333px] shrink-0 items-center justify-center rounded-[10px] bg-white shadow-[4px_4px_20px_0px_rgba(0,0,0,0.1)] lg:h-[640px] lg:w-[410px]">
           <div
-            className="h-[507px] w-[203px] rounded-[9px] p-[9px] shadow-[0px_4px_18px_0px_rgba(0,0,0,0.1)]"
+            className="h-[412px] w-[165px] rounded-[9px] p-[9px] shadow-[0px_4px_18px_0px_rgba(0,0,0,0.1)] lg:h-[507px] lg:w-[203px]"
             style={{
               background:
                 'linear-gradient(135deg, #f2f2f0 0%, #b6b6b3 22%, #8a8a87 50%, #b6b6b3 78%, #f2f2f0 100%)',
@@ -32,11 +35,13 @@ export default function About() {
 
         <div className="max-w-[530px]">
           <div className="flex items-baseline whitespace-nowrap">
-            <span className="font-pixel text-[165px] leading-none">h</span>
-            <span className="text-[80px] leading-none tracking-[-3.2px]">i! I&rsquo;m Amy.</span>
+            <span className="font-pixel text-[115px] leading-none lg:text-[165px]">h</span>
+            <span className="text-[56px] leading-none tracking-[-2.24px] lg:text-[80px] lg:tracking-[-3.2px]">
+              i! I&rsquo;m Amy.
+            </span>
           </div>
 
-          <div className="mt-12 text-[24px] leading-normal tracking-[-0.96px]">
+          <div className="mt-8 text-[24px] leading-normal tracking-[-0.96px] lg:mt-12">
             <p>
               I&apos;m a designer born and raised in northern New Jersey and currently studying at the University of
               Illinois Urbana-Champaign. What drew me to design is its ability to create empathetic, thoughtful
