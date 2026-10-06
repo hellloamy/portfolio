@@ -7,22 +7,25 @@ export default function Footer() {
         <p className="m-0">© Amy Wang, 2026</p>
         <p className="m-0 hidden sm:block">built and designed with love and lots of podcasts</p>
       </div>
-      <div className="flex gap-12 items-center">
+      {/* On a phone the pair is pulled in to roughly the copyright's size and set
+          close together, so the row reads as one group rather than two words pushed
+          against opposite edges. Full size from sm up. */}
+      <div className="flex gap-5 items-center sm:gap-12">
         <a
           href="mailto:agwang2@illinois.edu"
-          className="flex gap-2 items-center justify-center text-[32px] text-black tracking-[-1.28px]"
+          className="flex gap-1.5 items-center justify-center text-[20px] text-black tracking-[-0.8px] sm:gap-2 sm:text-[32px] sm:tracking-[-1.28px]"
         >
           email
-          <img src={arrowExternal} alt="" className="size-6" />
+          <img src={arrowExternal} alt="" className="size-4 sm:size-6" />
         </a>
         <a
           href="https://www.linkedin.com/in/amywang6"
           target="_blank"
           rel="noreferrer"
-          className="flex gap-2 items-center justify-center text-[32px] text-black tracking-[-1.28px]"
+          className="flex gap-1.5 items-center justify-center text-[20px] text-black tracking-[-0.8px] sm:gap-2 sm:text-[32px] sm:tracking-[-1.28px]"
         >
           linkedin
-          <img src={arrowExternal} alt="" className="size-6" />
+          <img src={arrowExternal} alt="" className="size-4 sm:size-6" />
         </a>
       </div>
     </footer>
