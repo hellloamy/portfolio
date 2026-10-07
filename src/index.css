@@ -61,24 +61,20 @@ body {
    down (gravity), decelerate into each rebound. */
 @keyframes photobooth-drop {
   0% {
-    transform: translateY(-120%) rotate(-7deg);
-    animation-timing-function: cubic-bezier(0.5, 0, 0.9, 0.45);
+    transform: translateY(-120%) rotate(-5deg);
+    animation-timing-function: cubic-bezier(0.45, 0, 0.75, 0.6);
   }
-  52% {
-    transform: translateY(3%) rotate(1.4deg);
-    animation-timing-function: cubic-bezier(0.2, 0.6, 0.4, 1);
+  55% {
+    transform: translateY(1.8%) rotate(0.9deg);
+    animation-timing-function: cubic-bezier(0.25, 0.5, 0.45, 1);
   }
-  68% {
-    transform: translateY(-4.5%) rotate(-1.8deg);
-    animation-timing-function: cubic-bezier(0.5, 0, 0.9, 0.5);
+  72% {
+    transform: translateY(-2.4%) rotate(-1deg);
+    animation-timing-function: cubic-bezier(0.45, 0, 0.6, 1);
   }
-  82% {
-    transform: translateY(1.6%) rotate(0.7deg);
-    animation-timing-function: cubic-bezier(0.2, 0.6, 0.4, 1);
-  }
-  92% {
-    transform: translateY(-0.6%) rotate(-0.25deg);
-    animation-timing-function: cubic-bezier(0.5, 0, 0.9, 0.5);
+  87% {
+    transform: translateY(0.7%) rotate(0.35deg);
+    animation-timing-function: cubic-bezier(0.4, 0, 0.4, 1);
   }
   100% {
     transform: translateY(0) rotate(0deg);
@@ -86,7 +82,7 @@ body {
 }
 
 .photobooth-drop {
-  animation: photobooth-drop 1s 0.1s both;
+  animation: photobooth-drop 1.05s 0.1s both;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -119,14 +115,27 @@ body {
   image-rendering: pixelated;
   /* Stacked drop-shadows trace the sprite's alpha, so the bloom follows the
      letterform instead of its bounding box. The rose tints sit deeper than the
-     #fdd6e5 panel so the halo actually reads against it, and the slight opacity
+     #fde4ec panel so the halo actually reads against it, and the slight opacity
      lets the pink through the strokes for a tinted-glass look. */
   opacity: 0.92;
   filter:
     drop-shadow(0 0 2px rgba(247, 168, 200, 0.5))
     drop-shadow(0 0 7px rgba(242, 140, 180, 0.32))
     drop-shadow(0 0 16px rgba(236, 115, 162, 0.18));
-  animation: intro-sprite 1.7s steps(17) 1 both;
+  /* Hidden until the 0.2s beat ends, so the panel opens as plain pink rather than
+     parking on frame 1. `forwards` (not `both`) keeps the hidden base state during
+     the delay, then holds it visible once revealed. */
+  visibility: hidden;
+  animation:
+    intro-sprite 1.7s steps(17) 0.2s 1 both,
+    intro-sprite-reveal 1ms 0.2s forwards;
+}
+
+@keyframes intro-sprite-reveal {
+  from,
+  to {
+    visibility: visible;
+  }
 }
 
 /* The pusher: a 2-frame cycle that loops while she shoves the panel off-screen.

@@ -20,7 +20,7 @@ export default function About() {
               className="relative size-full overflow-hidden rounded-[3px]"
               style={{
                 background:
-                  'radial-gradient(120% 90% at 50% 15%, #ffe6f0 0%, #fed5e5 45%, #f7b9d3 100%)',
+                  'radial-gradient(120% 90% at 50% 15%, #fff1f5 0%, #fde4ec 45%, #f6c8da 100%)',
               }}
             >
               <img
@@ -28,7 +28,7 @@ export default function About() {
                 alt="Photobooth strip of Amy"
                 className="photobooth-drop pointer-events-none absolute inset-0 size-full object-contain"
               />
-              <div className="pointer-events-none absolute inset-0 shadow-[inset_0px_4px_18px_18px_rgba(0,0,0,0.25)]" />
+              <div className="pointer-events-none absolute inset-0 shadow-[inset_0px_3px_24px_10px_rgba(0,0,0,0.2)]" />
             </div>
           </div>
         </div>

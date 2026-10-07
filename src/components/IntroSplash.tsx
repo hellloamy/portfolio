@@ -4,11 +4,11 @@ import { useNavigationType } from 'react-router-dom'
 import introSprite from '../assets/images/intro-pixel-sprite.png'
 import pusherSprite from '../assets/images/intro-pusher-sprite.png'
 
-/** 18 frames at 80ms, then she shoves the panel off to the right. */
-const PLAY_MS = 1900
+/** A 200ms beat, 18 frames at ~100ms, then she shoves the panel off to the right. */
+const PLAY_MS = 2100
 const EXIT_MS = 2800
 
-const PANEL_COLOR = '#fdd6e5'
+const PANEL_COLOR = '#fde4ec'
 
 /** Read-only so it stays safe to call during render, including StrictMode's double pass. */
 function canPlay() {
