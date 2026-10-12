@@ -4,7 +4,7 @@ export default function Footer() {
   return (
     <footer className="flex items-end justify-between">
       <div className="text-[24px] text-black tracking-[-0.96px] leading-normal">
-        <p className="m-0">© Amy Wang, 2026</p>
+        <p className="m-0 text-gray-2">© Amy Wang, 2026</p>
         <p className="m-0 hidden sm:block">built and designed with love and lots of podcasts</p>
       </div>
       {/* On a phone the pair drops to the copyright's own size and sits close
