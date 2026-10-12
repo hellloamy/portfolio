@@ -67,7 +67,7 @@ export default function Home() {
             </div>
 
             <AnnotationBox className="left-0 top-[256px]" widthClass="w-[400px]">
-              currently studying <span className="font-bold">information sciences</span> @ <span className="font-bold">uiuc</span>
+              currently studying <span className="font-bold">cs + advertising</span> @ <span className="font-bold">uiuc</span>
             </AnnotationBox>
 
             <AnnotationBox className="left-[686px] top-[78px]" widthClass="w-[420px]">
