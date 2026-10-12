@@ -27,7 +27,7 @@ export default function WinkingFace({ className }: { className?: string }) {
   }
 
   return (
-    <button type="button" onClick={playWink} aria-label="Wink" className={`cursor-pointer ${className ?? ''}`}>
+    <button type="button" onMouseEnter={playWink} onClick={playWink} aria-label="Wink" className={`cursor-pointer ${className ?? ''}`}>
       <img src={src} alt="" className="size-full" />
     </button>
   )
