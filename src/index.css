@@ -131,6 +131,17 @@ body {
     intro-sprite-reveal 1ms 0.2s forwards;
 }
 
+/* The puffed A (IntroPuffSprite) keeps the CSS sprite's glow and tint; its
+   script reveals it on the first frame, after the same 0.2s beat. */
+.intro-sprite-puff {
+  opacity: 0.92;
+  filter:
+    drop-shadow(0 0 2px rgba(247, 168, 200, 0.5))
+    drop-shadow(0 0 7px rgba(242, 140, 180, 0.32))
+    drop-shadow(0 0 16px rgba(236, 115, 162, 0.18));
+  visibility: hidden;
+}
+
 @keyframes intro-sprite-reveal {
   from,
   to {
@@ -179,4 +190,14 @@ body {
   .chevron-pulse {
     animation: none;
   }
+}
+
+/* PuffLayer: once its canvas has drawn the hero art, the DOM copies only hold
+   the layout and take the clicks */
+.puff-layer[data-puff-ready] [data-puff-text] span {
+  color: transparent;
+}
+
+.puff-layer[data-puff-ready] img {
+  opacity: 0;
 }
