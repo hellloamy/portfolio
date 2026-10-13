@@ -63,7 +63,8 @@ void main(){
   float wet = clamp(exp(-dot(rel, rel)/(2.*120.*120.))*uHover*1.4, 0., 1.);
   ink += vec3(0.62, 0.64, 0.7)*(spec*0.56 + exp(-dot(rel, rel)/(2.*170.*170.))*0.1)*wet*(1. - 0.6*lum);
 
-  vec3 col = mix(base, clamp(ink, 0., 1.), uInflate);                  // at rest: exactly the original art
+  float blk = 1. - smoothstep(0.6, 0.75, lum);                         // black and grey puff and shine; light colours don't
+  vec3 col = mix(base, clamp(ink, 0., 1.), uInflate*blk);              // at rest: exactly the original art
   o = vec4(col*f.r, f.r);                                               // premultiplied
 }`
 
@@ -149,13 +150,13 @@ export function createPuffRenderer(canvas: HTMLCanvasElement) {
         canvas.width = W
         canvas.height = H
       }
-      // height source: coverage, with dark pixels standing a little taller than light ones
+      // height source: the black and grey stand up; the light pink and white stay flat
       const c = art.getContext('2d', { willReadFrequently: true })!.getImageData(0, 0, W, H).data
       const hsrc = new ImageData(W, H)
       const hd = hsrc.data
       for (let i = 0; i < c.length; i += 4) {
         const lum = (c[i] * 0.3 + c[i + 1] * 0.59 + c[i + 2] * 0.11) / 255
-        hd[i + 3] = c[i + 3] * (1 - 0.4 * lum)
+        hd[i + 3] = c[i + 3] * Math.min(1, Math.max(0, (0.75 - lum) / 0.15))
       }
       const hc = canvas2d(W, H)
       hc.getContext('2d')!.putImageData(hsrc, 0, 0)
