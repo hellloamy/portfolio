@@ -67,7 +67,7 @@ export default function PuffLayer({ children }: { children: React.ReactNode }) {
 
     async function build() {
       const spans = [...wrap.querySelectorAll<HTMLElement>('[data-puff-text] span')]
-      const imgs = [...wrap.querySelectorAll<HTMLImageElement>('img')]
+      const allImgs = [...wrap.querySelectorAll<HTMLImageElement>('img')]
       if (!fontsLoaded) await loadFonts(spans)
       if (disposed) return
       const dpr = window.devicePixelRatio || 1
@@ -76,9 +76,13 @@ export default function PuffLayer({ children }: { children: React.ReactNode }) {
       const W = Math.round(crect.width * dpr)
       const H = Math.round(crect.height * dpr)
       if (!W || !H) return
-      // wait for every image's first frame, so the art never shows up half-drawn
-      const sources = imgs.map(drawable)
-      if (!ready && sources.some((s) => !s)) return
+      // wait for every image's first frame, so the art never shows up half-drawn.
+      // Hidden frames (data-puff-hidden) are decoded too, so they're ready the
+      // moment they're shown, but only the visible ones are drawn.
+      const allSources = allImgs.map(drawable)
+      if (!ready && allSources.some((s) => !s)) return
+      const imgs = allImgs.filter((img) => !img.hasAttribute('data-puff-hidden'))
+      const sources = imgs.map((img) => allSources[allImgs.indexOf(img)])
 
       // draw everything where the browser laid it out: text in its own font, art with crisp pixels
       const art = canvas2d(W, H)
@@ -175,9 +179,9 @@ export default function PuffLayer({ children }: { children: React.ReactNode }) {
     queueBuild()
     const ro = new ResizeObserver(queueBuild)
     ro.observe(wrap)
-    // animated art swaps its <img> src (and the cursor its size): redraw when it does
+    // animated art swaps its <img> src (and the cursor its size and visible frame): redraw when it does
     const mo = new MutationObserver(queueBuild)
-    mo.observe(wrap, { subtree: true, attributes: true, attributeFilter: ['src', 'style'] })
+    mo.observe(wrap, { subtree: true, attributes: true, attributeFilter: ['src', 'style', 'data-puff-hidden'] })
     wrap.addEventListener('load', queueBuild, true)
     window.addEventListener('resize', queueBuild)
     window.addEventListener('pointermove', onMove, { passive: true })
