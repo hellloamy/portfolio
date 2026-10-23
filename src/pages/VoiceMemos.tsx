@@ -13,7 +13,7 @@ import logoBandlab from '../assets/images/case-study/logo-bandlab.png'
 import vmLowfi1 from '../assets/images/case-study/vm-lowfi-1.webp'
 import vmLowfi2 from '../assets/images/case-study/vm-lowfi-2.webp'
 import vmMidfi from '../assets/images/case-study/vm-midfi.webp'
-import vmFinalCurrent from '../assets/images/case-study/vm-final-current.webp'
+import vmFinalCurrent from '../assets/images/case-study/vm-final-current.jpg'
 import vmFinalRedesign from '../assets/images/case-study/vm-final-redesign.mp4'
 
 const CARD_SHADOW = 'shadow-[0_20px_35px_-12px_rgba(0,0,0,0.25)]'
@@ -405,7 +405,9 @@ export default function VoiceMemos() {
         </section>
 
         {/* Final product — the shipping app beside the redesign, at a shared height
-            so the two read as a before/after pair. */}
+            so the two read as a before/after pair. Like the X redesign, the phones sit
+            right on the page: the area outside each phone is white in the files and
+            multiply drops it. */}
         <section className="mb-16 mt-24">
           <p className="mb-[37px] text-[20px] text-gray-2 tracking-[-0.8px]">final product</p>
           <div className="flex items-start justify-center gap-16">
@@ -413,7 +415,7 @@ export default function VoiceMemos() {
               <img
                 src={vmFinalCurrent}
                 alt="Voice Memos as it ships today"
-                className={`h-[620px] w-auto rounded-[20px] border-[40px] border-black ${CARD_SHADOW}`}
+                className="h-[690px] w-auto mix-blend-multiply"
               />
               <p className="mt-6 text-[24px] tracking-[-0.96px]">current</p>
             </div>
@@ -425,7 +427,7 @@ export default function VoiceMemos() {
                 loop
                 muted
                 playsInline
-                className={`h-[620px] w-auto rounded-[20px] border-[40px] border-black ${CARD_SHADOW}`}
+                className="h-[690px] w-auto mix-blend-multiply"
               />
               <p className="mt-6 text-[24px] tracking-[-0.96px]">redesign</p>
             </div>
