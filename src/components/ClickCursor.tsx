@@ -18,8 +18,7 @@ const ANIMATED_SIZE = { width: 120, height: 150 }
 // Every image stays mounted (so each frame is decoded before it's needed) and only
 // the active one is shown. Swapping a single <img>'s src made the button grow to
 // the animated size before the next frame had loaded, so the stationary art
-// flashed stretched to 120x150 on click. data-puff-hidden keeps PuffLayer, which
-// redraws every hero <img> itself, from painting the inactive frames.
+// flashed stretched to 120x150 on click.
 export default function ClickCursor({ className }: { className?: string }) {
   // -1 is the stationary cursor; 0..n are animation frames.
   const [frame, setFrame] = useState(-1)
@@ -50,7 +49,6 @@ export default function ClickCursor({ className }: { className?: string }) {
         <img
           src={stationaryCursor}
           alt=""
-          data-puff-hidden={frame === -1 ? undefined : ''}
           className={`absolute bottom-0 right-0 max-w-none ${frame === -1 ? '' : 'invisible'}`}
           style={STATIONARY_SIZE}
         />
@@ -59,7 +57,6 @@ export default function ClickCursor({ className }: { className?: string }) {
             key={src}
             src={src}
             alt=""
-            data-puff-hidden={frame === i ? undefined : ''}
             className={`absolute bottom-0 right-0 max-w-none ${frame === i ? '' : 'invisible'}`}
             style={ANIMATED_SIZE}
           />

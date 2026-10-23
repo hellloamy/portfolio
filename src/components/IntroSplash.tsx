@@ -3,7 +3,6 @@ import { createPortal } from 'react-dom'
 import { useNavigationType } from 'react-router-dom'
 import introSprite from '../assets/images/intro-pixel-sprite.png'
 import pusherSprite from '../assets/images/intro-pusher-sprite.png'
-import IntroPuffSprite from './IntroPuffSprite'
 
 /** A 200ms beat, 18 frames at ~100ms, then she shoves the panel off to the right. */
 const PLAY_MS = 2100
@@ -78,8 +77,8 @@ export default function IntroSplash() {
       }`}
       style={{ backgroundColor: PANEL_COLOR }}
     >
-      {/* the cursive A, puffed up and lit from the cursor like the hero */}
-      <IntroPuffSprite src={introSprite} />
+      {/* rendered at the source's native 200x140 so the pixel grid stays exact */}
+      <div className="intro-sprite" style={{ '--intro-sprite-src': `url(${introSprite})` } as React.CSSProperties} />
 
       {/* She stands OUTSIDE the panel: right-full puts her right edge flush against
           the panel's left edge, so her hands meet the pink rather than sitting on
