@@ -1,10 +1,10 @@
+import { useRef, useState } from 'react'
 import Layout from '../components/Layout'
 import IntroSplash from '../components/IntroSplash'
 import ProjectCard from '../components/ProjectCard'
 import SpinningCd from '../components/SpinningCd'
 import WinkingFace from '../components/WinkingFace'
 import ClickCursor from '../components/ClickCursor'
-import PuffLayer from '../components/PuffLayer'
 import scrollChevron from '../assets/icons/scroll-chevron.svg'
 import projectsPGlyph from '../assets/icons/projects-p-glyph.png'
 import thumbXRedesign from '../assets/images/thumb-x-redesign.png'
@@ -30,8 +30,37 @@ function AnnotationBox({
   widthClass: string
   children: React.ReactNode
 }) {
+  // Visitors can drag the box around; offset is in the hero's own (unzoomed) px
+  const [offset, setOffset] = useState({ x: 0, y: 0 })
+  const drag = useRef<{ x: number; y: number; scale: number } | null>(null)
+
+  const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (e.button !== 0) return
+    e.currentTarget.setPointerCapture(e.pointerId)
+    // #root is zoomed, so screen px don't match layout px one to one
+    const scale = e.currentTarget.getBoundingClientRect().width / e.currentTarget.offsetWidth
+    drag.current = { x: e.clientX / scale - offset.x, y: e.clientY / scale - offset.y, scale }
+  }
+
+  const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    const d = drag.current
+    if (d) setOffset({ x: e.clientX / d.scale - d.x, y: e.clientY / d.scale - d.y })
+  }
+
+  const onPointerUp = () => {
+    drag.current = null
+  }
+
   return (
-    <div className={`absolute ${className} ${widthClass}`}>
+    <div
+      data-draggable
+      onPointerDown={onPointerDown}
+      onPointerMove={onPointerMove}
+      onPointerUp={onPointerUp}
+      onPointerCancel={onPointerUp}
+      className={`absolute ${className} ${widthClass} cursor-grab touch-none select-none active:cursor-grabbing`}
+      style={{ transform: `translate(${offset.x}px, ${offset.y}px)` }}
+    >
       <div className="relative border-[0.8px] border-gray-2 px-4 py-3">
         <span className="absolute -left-[4px] -top-[4px] size-2 border-[0.8px] border-gray-2 bg-gray-1" />
         <span className="absolute -left-[4px] -bottom-[4px] size-2 border-[0.8px] border-gray-2 bg-gray-1" />
@@ -53,36 +82,33 @@ export default function Home() {
         {/* Hero — tight bounding box around just the wordmark cluster, centered in one viewport */}
         <div className="relative hidden min-h-[calc(150vh-90px)] items-center justify-center md:flex">
           <div className="relative -translate-y-32 h-[429px] w-[1106px] shrink-0">
-            {/* Hovering the cluster puffs the name and pixel art up and lights them from the cursor */}
-            <PuffLayer>
-              <SpinningCd className="absolute left-[120px] top-0 size-[120px]" />
-              <WinkingFace className="absolute left-[858px] top-[309px] size-[120px]" />
+            {/* The draggable description boxes come first so the art, name and cursor
+                all stack above them wherever they're dropped */}
+            <AnnotationBox className="left-0 top-[256px]" widthClass="w-[400px]">
+              currently studying <span className="font-bold">cs + advertising</span> @ <span className="font-bold">uiuc</span>
+            </AnnotationBox>
 
-              <div data-puff-text className="contents">
-                {/* Each row is baseline-aligned so the pixel capital and the sans letters
-                    share a bottom edge; the sans margin sets the gap between them. */}
-                <div className="absolute left-[284px] top-[6px] flex items-baseline whitespace-nowrap">
-                  <span className="font-pixel text-[264px] leading-none">A</span>
-                  <span className="ml-0 text-[128px] leading-none tracking-[-5.12px]">my</span>
-                </div>
-                <div className="absolute left-[468px] top-[163px] flex items-baseline whitespace-nowrap">
-                  <span className="font-pixel text-[264px] leading-none">W</span>
-                  <span className="ml-[-40px] text-[128px] leading-none tracking-[-5.12px]">ang</span>
-                </div>
-              </div>
+            <AnnotationBox className="left-[686px] top-[78px]" widthClass="w-[420px]">
+              <span className="font-bold">ux designer</span> passionate about using <span className="font-bold">empathy</span> to create{' '}
+              <span className="font-bold">intuitive user interfaces</span>
+            </AnnotationBox>
 
-              <AnnotationBox className="left-0 top-[256px]" widthClass="w-[400px]">
-                currently studying <span className="font-bold">cs + advertising</span> @ <span className="font-bold">uiuc</span>
-              </AnnotationBox>
+            <SpinningCd className="absolute left-[120px] top-0 size-[120px]" />
+            <WinkingFace className="absolute left-[858px] top-[309px] size-[120px]" />
 
-              <AnnotationBox className="left-[686px] top-[78px]" widthClass="w-[420px]">
-                <span className="font-bold">ux designer</span> passionate about using <span className="font-bold">empathy</span> to create{' '}
-                <span className="font-bold">intuitive user interfaces</span>
-              </AnnotationBox>
+            {/* Each row is baseline-aligned so the pixel capital and the sans letters
+                share a bottom edge; the sans margin sets the gap between them. */}
+            <div className="absolute left-[284px] top-[6px] flex items-baseline whitespace-nowrap">
+              <span className="font-pixel text-[264px] leading-none">A</span>
+              <span className="ml-0 text-[128px] leading-none tracking-[-5.12px]">my</span>
+            </div>
+            <div className="absolute left-[468px] top-[163px] flex items-baseline whitespace-nowrap">
+              <span className="font-pixel text-[264px] leading-none">W</span>
+              <span className="ml-[-40px] text-[128px] leading-none tracking-[-5.12px]">ang</span>
+            </div>
 
-              {/* Cursor renders last so it stacks above the annotation boxes it overlaps */}
-              <ClickCursor className="absolute left-[354px] top-[329px] z-10 h-[100px] w-[70px]" />
-            </PuffLayer>
+            {/* Cursor renders last so it stacks above the annotation boxes it overlaps */}
+            <ClickCursor className="absolute left-[354px] top-[329px] z-10 h-[100px] w-[70px]" />
           </div>
 
           <img
