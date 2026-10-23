@@ -507,15 +507,17 @@ export default function XRedesign() {
           <p className="mb-[37px] text-[20px] text-gray-2 tracking-[-0.8px]">final product</p>
           <div className="flex w-full gap-6">
             {finalProduct.map((item, i) => (
-              <div key={i} className="w-[336px]">
+              <div key={i} className="min-w-0 flex-1">
+                {/* The clips are cropped tight to the phone; multiply drops the white
+                    left in its rounded corners so the phone sits right on the page */}
                 <video
                   src={item.video}
                   autoPlay
                   loop
                   muted
                   playsInline
-                  style={{ aspectRatio: 664 / 1192 }}
-                  className={`w-full rounded-[20px] object-contain ${CARD_SHADOW}`}
+                  style={{ aspectRatio: 524 / 1062 }}
+                  className="w-full object-contain mix-blend-multiply"
                 />
                 <div className="mt-5 text-[24px] tracking-[-0.96px]">
                   <p>{item.lines[0]}</p>
