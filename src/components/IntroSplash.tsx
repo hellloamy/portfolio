@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useLayoutEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { useNavigationType } from 'react-router-dom'
 import introSprite from '../assets/images/intro-pixel-sprite.png'
@@ -32,6 +32,17 @@ export default function IntroSplash() {
   const [state, setState] = useState<State>(() =>
     canPlay() && navigationType === 'POP' ? 'playing' : 'done',
   )
+
+  // The mouse cursor stays hidden until the splash is fully gone.
+  // A layout effect so the cursor never shows for a frame before it's hidden.
+  const showing = state !== 'done'
+  useLayoutEffect(() => {
+    if (!showing) return
+    document.documentElement.dataset.intro = ''
+    return () => {
+      delete document.documentElement.dataset.intro
+    }
+  }, [showing])
 
   useEffect(() => {
     if (state !== 'playing') return

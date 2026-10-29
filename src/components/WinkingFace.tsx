@@ -27,7 +27,15 @@ export default function WinkingFace({ className }: { className?: string }) {
   }
 
   return (
-    <button type="button" onMouseEnter={playWink} onClick={playWink} aria-label="Wink" className={`cursor-pointer ${className ?? ''}`}>
+    // Hovering already plays the wink, so a click adds nothing: it keeps the plain cursor
+    <button
+      type="button"
+      onMouseEnter={playWink}
+      onClick={playWink}
+      aria-label="Wink"
+      data-cursor="plain"
+      className={className}
+    >
       <img src={src} alt="" className="size-full" />
     </button>
   )

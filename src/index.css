@@ -46,6 +46,48 @@ body {
   zoom: 66.667%;
 }
 
+/* A small pink pixel ring for the cursor, filling in over anything clickable. These
+   sit outside Tailwind's layers so they win over its cursor-pointer utility. */
+html {
+  cursor: url("./assets/icons/cursor-ring.svg") 7 7, auto;
+}
+
+a,
+button,
+label,
+select,
+summary,
+[role="button"],
+[data-draggable],
+.cursor-pointer {
+  cursor: url("./assets/icons/cursor-ring-filled.svg") 7 7, pointer;
+}
+
+/* Buttons that only react to hover, where a click does nothing extra */
+[data-cursor="plain"] {
+  cursor: url("./assets/icons/cursor-ring.svg") 7 7, auto;
+}
+
+input,
+textarea {
+  cursor: text;
+}
+
+/* Page-background colour over the project thumbnails, where pink would get lost in the artwork */
+[data-cursor="light"] {
+  cursor: url("./assets/icons/cursor-ring-light.svg") 7 7, auto;
+}
+
+a [data-cursor="light"] {
+  cursor: url("./assets/icons/cursor-ring-light-filled.svg") 7 7, pointer;
+}
+
+/* No mouse cursor while the intro splash plays; IntroSplash sets the attribute */
+html[data-intro],
+html[data-intro] * {
+  cursor: none !important;
+}
+
 /* The photo strip falls in from above the slot and settles with a couple of
    diminishing bounces. Per-keyframe easing does the work: accelerate on the way
    down (gravity), decelerate into each rebound. */

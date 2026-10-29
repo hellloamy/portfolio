@@ -68,6 +68,7 @@ export default function ProjectCard({ title, meta, image, to }: ProjectCardProps
         ref={frameRef}
         onMouseMove={trackCursor}
         onMouseLeave={() => setVisible(false)}
+        data-cursor="light"
         className="group relative isolate aspect-[492/336] w-full overflow-hidden rounded-2xl shadow-[0_20px_35px_-12px_rgba(0,0,0,0.25)]"
       >
         <img src={image} alt={title} className="size-full object-cover transition-transform duration-500 ease-out group-hover:scale-105" />
@@ -105,5 +106,5 @@ export default function ProjectCard({ title, meta, image, to }: ProjectCardProps
     )
   }
 
-  return <div className="cursor-default">{content}</div>
+  return <div>{content}</div>
 }
