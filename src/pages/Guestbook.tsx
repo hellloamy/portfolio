@@ -330,7 +330,7 @@ export default function Guestbook() {
                   />
                 ))}
 
-                <div className="ml-auto flex gap-1 rounded-[14px] bg-[#eeeeee] p-1.5">
+                <div className="ml-auto flex h-14 gap-1 rounded-[14px] bg-[#eeeeee] p-1.5">
                   {(['pen', 'eraser'] as const).map((t) => (
                     <button
                       key={t}
@@ -338,7 +338,7 @@ export default function Guestbook() {
                       aria-label={t === 'pen' ? 'Pen' : 'Eraser'}
                       aria-pressed={tool === t}
                       onClick={() => setTool(t)}
-                      className={`flex size-14 cursor-pointer items-center justify-center rounded-[10px] ${
+                      className={`flex size-11 cursor-pointer items-center justify-center rounded-[10px] ${
                         tool === t ? 'bg-white text-black' : 'text-gray-2 hover:text-black'
                       }`}
                     >
@@ -374,7 +374,7 @@ export default function Guestbook() {
                 type="button"
                 onClick={submit}
                 disabled={sending}
-                className="mt-5 w-full cursor-pointer rounded-[14px] bg-black py-4 text-[22px] tracking-[-0.6px] text-white disabled:cursor-wait disabled:opacity-60"
+                className="mt-5 h-14 w-full cursor-pointer rounded-[14px] bg-black text-[22px] tracking-[-0.6px] text-white disabled:cursor-wait disabled:opacity-60"
               >
                 {sending ? 'pinning…' : 'pin to the wall →'}
               </button>
