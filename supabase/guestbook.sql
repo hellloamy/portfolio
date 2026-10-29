@@ -6,9 +6,14 @@ create table if not exists public.guestbook (
   name text not null check (char_length(trim(name)) between 1 and 20),
   -- 24x24 doodle, one character per pixel, row by row:
   -- '.' empty, 'k' black, 'g' grey, 'p' pink
-  pixels text not null check (pixels ~ '^[.kgp]{576}$'),
+  -- (Postgres regexes cap repeat counts at 255, so the length is checked separately)
+  pixels text not null check (char_length(pixels) = 576 and pixels ~ '^[.kgp]+$'),
   created_at timestamptz not null default now()
 );
+
+-- Let visitors reach the table through the Data API at all (needed when new tables
+-- aren't exposed automatically). The policies below then decide what they can do.
+grant select, insert on public.guestbook to anon;
 
 alter table public.guestbook enable row level security;
 
