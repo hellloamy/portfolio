@@ -1,5 +1,5 @@
-import { useRef, useState } from 'react'
 import Layout from '../components/Layout'
+import SelectionBox from '../components/SelectionBox'
 import IntroSplash from '../components/IntroSplash'
 import ProjectCard from '../components/ProjectCard'
 import SpinningCd from '../components/SpinningCd'
@@ -30,45 +30,10 @@ function AnnotationBox({
   widthClass: string
   children: React.ReactNode
 }) {
-  // Visitors can drag the box around; offset is in the hero's own (unzoomed) px
-  const [offset, setOffset] = useState({ x: 0, y: 0 })
-  const drag = useRef<{ x: number; y: number; scale: number } | null>(null)
-
-  const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (e.button !== 0) return
-    e.currentTarget.setPointerCapture(e.pointerId)
-    // #root is zoomed, so screen px don't match layout px one to one
-    const scale = e.currentTarget.getBoundingClientRect().width / e.currentTarget.offsetWidth
-    drag.current = { x: e.clientX / scale - offset.x, y: e.clientY / scale - offset.y, scale }
-  }
-
-  const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
-    const d = drag.current
-    if (d) setOffset({ x: e.clientX / d.scale - d.x, y: e.clientY / d.scale - d.y })
-  }
-
-  const onPointerUp = () => {
-    drag.current = null
-  }
-
   return (
-    <div
-      data-draggable
-      onPointerDown={onPointerDown}
-      onPointerMove={onPointerMove}
-      onPointerUp={onPointerUp}
-      onPointerCancel={onPointerUp}
-      className={`absolute ${className} ${widthClass} cursor-grab touch-none select-none active:cursor-grabbing`}
-      style={{ transform: `translate(${offset.x}px, ${offset.y}px)` }}
-    >
-      <div className="relative border-[0.8px] border-gray-2 px-4 py-3">
-        <span className="absolute -left-[4px] -top-[4px] size-2 border-[0.8px] border-gray-2 bg-gray-1" />
-        <span className="absolute -left-[4px] -bottom-[4px] size-2 border-[0.8px] border-gray-2 bg-gray-1" />
-        <span className="absolute -right-[4px] -top-[4px] size-2 border-[0.8px] border-gray-2 bg-gray-1" />
-        <span className="absolute -right-[4px] -bottom-[4px] size-2 border-[0.8px] border-gray-2 bg-gray-1" />
-        <p className="text-justify text-[24px] leading-normal tracking-[-0.96px]">{children}</p>
-      </div>
-    </div>
+    <SelectionBox className={`absolute ${className} ${widthClass}`} innerClassName="px-4 py-3">
+      <p className="text-justify text-[24px] leading-normal tracking-[-0.96px]">{children}</p>
+    </SelectionBox>
   )
 }
 

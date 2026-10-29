@@ -5,6 +5,7 @@ const resumePdf = '/amy-wang-resume.pdf'
 const items = [
   { number: '01', label: 'Home', to: '/' },
   { number: '02', label: 'About', to: '/about' },
+  { number: '03', label: 'Guestbook', to: '/guestbook' },
 ]
 
 export default function Nav() {
@@ -22,7 +23,7 @@ export default function Nav() {
         rel="noreferrer"
         className="flex flex-col gap-4 items-start"
       >
-        <p className="text-[20px] text-gray-2 tracking-[-0.8px]">03</p>
+        <p className="text-[20px] text-gray-2 tracking-[-0.8px]">04</p>
         <p className="text-[24px] text-black tracking-[-0.96px]">Resume</p>
       </a>
     </nav>

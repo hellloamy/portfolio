@@ -3,15 +3,15 @@ import Home from './pages/Home'
 import About from './pages/About'
 import XRedesign from './pages/XRedesign'
 import VoiceMemos from './pages/VoiceMemos'
-import PixelTrail from './components/PixelTrail'
+import Guestbook from './pages/Guestbook'
 
 function App() {
   return (
     <BrowserRouter>
-      <PixelTrail />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
+        <Route path="/guestbook" element={<Guestbook />} />
         <Route path="/projects/x-redesign" element={<XRedesign />} />
         <Route path="/projects/voice-memos" element={<VoiceMemos />} />
       </Routes>
