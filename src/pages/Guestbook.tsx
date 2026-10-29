@@ -246,23 +246,6 @@ export default function Guestbook() {
   const padRef = useRef<HTMLDivElement>(null)
   const wallRef = useRef<HTMLDivElement>(null)
   const pin = useRef<PinPlan | null>(null)
-  const [rowWidth, setRowWidth] = useState<number>()
-
-  // The polaroids wrap and rarely reach the column's right edge, so the header is
-  // sized to where the widest row actually ends, keeping the count flush with it.
-  // offsetLeft/offsetWidth ignore the tilt and #root's zoom, so this is in layout px.
-  useLayoutEffect(() => {
-    const el = wallRef.current
-    if (!el) return
-    const measure = () => {
-      const items = [...el.children] as HTMLElement[]
-      setRowWidth(items.length ? Math.max(...items.map((c) => c.offsetLeft + c.offsetWidth)) : undefined)
-    }
-    measure()
-    const observer = new ResizeObserver(measure)
-    observer.observe(el)
-    return () => observer.disconnect()
-  }, [wall])
 
   // Runs after the new doodle is in the DOM but before the browser paints it
   useLayoutEffect(() => {
@@ -401,14 +384,13 @@ export default function Guestbook() {
             </div>
 
             <div className="w-full lg:w-[664px]">
-              <div
-                className="mb-6 flex justify-between text-[20px] tracking-[-0.6px] text-gray-2"
-                style={rowWidth ? { width: rowWidth } : undefined}
-              >
+              {/* Spans the full three-polaroid wall, so the count always sits over the
+                  third column, however many doodles there are */}
+              <div className="mb-6 flex justify-between text-[20px] tracking-[-0.6px] text-gray-2">
                 <span>the wall</span>
                 {wall && <span>{count === 1 ? '1 doodle' : `${count} doodles`}</span>}
               </div>
-              <div ref={wallRef} className="relative flex flex-wrap gap-8">
+              <div ref={wallRef} className="flex flex-wrap gap-8">
                 {wall?.map((d) => (
                   <DoodleCard key={d.id} doodle={d} />
                 ))}
